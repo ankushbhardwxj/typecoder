@@ -1,16 +1,15 @@
 import React, { useRef, useState } from "react";
 import MonacoEditor from 'react-monaco-editor'
-import defCode from "./code";
+import Code from "./code";
 
 function Display(){
   function onChange(newValue, e){
     console.log('onchange', e);
   }
   function editorDidMount(editor, monaco){
-    console.log("MOUNTED");
     editor.focus();
   }
-  const [code] = useState(defCode);
+  const [code] = useState(Code);
   const options = {
     selectOnLineNumbers: true,
     cursorStyle: 'block',
@@ -20,6 +19,9 @@ function Display(){
   }
   return (
     <div>
+      <>
+      <h1>"Display"</h1>
+      </>
      <MonacoEditor
         width="600"
         height="600"

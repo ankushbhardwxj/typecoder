@@ -1,21 +1,34 @@
 import React, { useRef, useState } from "react";
 import './CodeDisplay.css'
 import MonacoEditor from 'react-monaco-editor'
-import defcode from './code'
+import Code from './code'
 
 function CodeDisplay(){
+  let lines = []
+    let j=0;
+    let i = 0;
   function onChange(v, e){
-    let l = v.length - 1;
-    // if code is 10 then get rid of length
-    if(v.charAt(l) == defcode.charAt(v.length-1))
-      console.log("same");
-    else console.log("ERROR!!!!")
-    // console.log("length",defcode.charAt(v.length-1))
+    try{
+      if(v.charCodeAt(v.length - 1) == 10){
+        i++;
+        j=0;
+      }
+      let line = lines[i][j];
+      console.log(line.charCodeAt(0))
+      j++;
+    }catch(e){
+      console.log("Error! Code Something")
+    }
+    
   }
+  function breakCode(Code){
+    let x = Code.split("\n")
+    x.map(r => lines.push(r))
+  }
+
   function editorDidMount(editor, monaco){
-    console.log("MOUNTED");
-    console.log(editor)
-    // console.log(monaco)
+    breakCode(Code);
+    console.log(Code)
     editor.focus();
   }
   const options = {
@@ -25,20 +38,22 @@ function CodeDisplay(){
     fontSize: 13,
     // readOnly: true,
   }
-  const [code] = useState('');
+  const [isMatch] = useState(true);
   const ref = useRef("monaco")
   return (
     <div>
-     <MonacoEditor
+      <div>
+        <h1>{isMatch?"yes":"no"}</h1>
+      </div>
+      <MonacoEditor
         ref={ref}
         width="600"
         height="600"
         theme="vs-dark"
-        value={code}
         options={options}
         onChange={onChange}
         editorDidMount={editorDidMount}
-      />
+        />
     </div>
   );
 }
