@@ -14,7 +14,6 @@ const Cursor = () => {
     }}>|</span>
   )
 }
-
 const Header = props => {
   return (
     <div>
@@ -33,7 +32,11 @@ const Header = props => {
         src={`${process.env.PUBLIC_URL}/image.PNG`}
       />
       <h4 style={styles.subheader}>
-        For fast programmers.
+        For
+        <span style={styles.subheader.focus}>
+          {" fast "}
+        </span>
+        programmers.
       </h4>
     </div>
   )
@@ -43,7 +46,7 @@ const Features = () => {
   const features = [
     'Improve your coding speed by typing actual code in your favorite languages',
     'Compete with fellow coders to become the fastest',
-    'Specially designed for competitive programmers',
+    '100% open source software designed for competitive programmers',
   ]
   return (
     <ul>
@@ -54,25 +57,15 @@ const Features = () => {
   )
 }
 
-const TryOut = () => {
-  return (
-    <Editor />
-  )
-}
 
 const HomePage = () => {
   return (
     <div style={styles.container}>
       <Header title="TypeCode" />
-      <Link to="/login">
-        <Button primary> Login</Button>
-      </Link>
-      <Grid>
-        <Grid.Row>
-          <Features />
-          <TryOut />
-        </Grid.Row>
-      </Grid>
+      {/* <Link to="/login">
+        <Button secondary> Login</Button>
+      </Link> */}
+      <Features />
     </div>
   )
 }
@@ -100,11 +93,21 @@ const styles = {
     fontFamily: 'Stalinist One, cursive',
     color: '#f05448',
     fontSize: '40px',
-    textAlign: 'center'
+    textAlign: 'center',
+    focus: {
+      color: '#f0a967'
+    }
   },
   li: {
     fontFamily: 'Acme, sans-serif',
-    fontSize: '20px'
+    fontSize: '20px',
+    color: '#e8e8e8',
+    marginTop: '11px',
+    borderBottom: '0.5px solid grey',
+    marginLeft: '30%',
+    marginRight: '30%',
+    listStyleType: 'none',
+    textAlign: 'center'
   }
 }
 export default HomePage;

@@ -45,7 +45,8 @@ const App = () => {
 
 const styles = {
   container: {
-    height: '400px',
+    display: 'fixed',
+    height: '1024px',
     background: '#222831'
   }
 }
