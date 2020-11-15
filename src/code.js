@@ -1,16 +1,5 @@
-var Code = `#include<iostream>
-using namespace std;
-
-int main(){
-
-  return 0;
+var code = `let code = data => {
+  return JSON.stringify(data)
 }
 `
-var defCode = []
-var defcode = Code.split("\n")
-defcode.map(d =>{
-  let x = d.trim()
-  defCode.push(x)
-})
-
-export default Code
+export default code;
