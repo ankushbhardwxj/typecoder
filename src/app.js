@@ -5,19 +5,29 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect
 } from 'react-router-dom';
 import Login from './components/Homepage/login';
 import { Container } from 'semantic-ui-react';
 
 const routes = [
   {
-    path: '/app',
+    path: '/app/code',
     exact: true,
-    main: () => <HomePage />
+    main: () => <Editor />
   },
   {
-    path: '/login',
+    path: '/app/login',
     main: () => <Login />
+  },
+  {
+    path: '/app',
+    exact: true,
+    main: () => <HomePage />,
+  },
+  {
+    path: '/',
+    main: () => <Redirect to='/app' />
   },
   {
     path: '*',
@@ -27,27 +37,29 @@ const routes = [
 
 const App = () => {
   return (
-    <Router>
-      <Container fluid style={styles.container}>
-        <Switch>
-          {routes.map((route, idx) => (
-            <Route
-              key={idx}
-              path={`${route.path}`}
-              children={route.main}
-            />
-          ))}
-        </Switch>
-      </Container>
-    </Router>
+    <div style={styles.container}>
+      <Router>
+        <Container fluid style={{ paddingTop: '60px' }}>
+          <Switch>
+            {routes.map((route, idx) => (
+              <Route
+                key={idx}
+                path={`${route.path}`}
+                children={route.main}
+              />
+            ))}
+          </Switch>
+        </Container>
+      </Router>
+    </div>
   )
 }
 
 const styles = {
   container: {
-    display: 'fixed',
-    height: '1024px',
+    minHeight: '100vh',
     background: '#222831'
   }
 }
+
 export default App;
