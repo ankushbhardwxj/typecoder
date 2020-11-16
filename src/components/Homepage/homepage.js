@@ -14,6 +14,7 @@ const Cursor = () => {
     }}>|</span>
   )
 }
+
 const Header = props => {
   return (
     <div>
@@ -63,7 +64,7 @@ const Footer = () => {
     <div>
       <p style={styles.footer}>
         Made with 🤟 by
-        <a style={styles.footer.link} href="https://github.com/ankingcodes">
+        <a target='blank' style={styles.footer.link} href="https://github.com/ankingcodes">
           {" @ankingcodes"}
         </a>
       </p>

@@ -1,29 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { Card, Container, Form } from 'semantic-ui-react';
+import { Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
 
 const SignInWith = props => {
   return (
-    <div>
-      <h2>Sign in with {props.AuthName}</h2>
+    <div
+      style={styles.icon}>
       <FontAwesomeIcon
-        style={styles.icons}
         icon={props.icon}
+        size='2x'
       />
     </div>
   )
 }
 
 const SignInForm = () => {
+  const [login, toggleLogin] = useState(true);
   return (
     <Card style={styles.container}>
       <Card.Content>
         <Card.Header>
-          <h2>TypeCode</h2>
-          <Card.Meta>
-            Login
-        </Card.Meta>
+          <h2 style={styles.header}>TypeCode</h2>
+          <Card.Meta style={styles.subHeader}>
+            {login ? <p>Login</p> : <p>Sign Up</p>}
+          </Card.Meta>
         </Card.Header>
         <Form>
           <Form.Field>
@@ -34,9 +35,38 @@ const SignInForm = () => {
           </Form.Field>
         </Form>
       </Card.Content>
+      <Divider horizontal>OR</Divider>
       <Card.Content extra>
-        <SignInWith icon={faGithub} AuthName="Github" />
-        <SignInWith icon={faGoogle} AuthName="Google" />
+        <p style={styles.subAuth}>Log in with</p>
+        <Grid>
+          <Grid.Row style={styles.icons}>
+            <SignInWith icon={faGithub} AuthName="Github" />
+            <SignInWith icon={faGoogle} AuthName="Google" />
+          </Grid.Row>
+        </Grid>
+      </Card.Content>
+      <Card.Content extra>
+        {
+          login ? (
+            <p style={{ color: 'black' }}>
+              Don't have an account ?
+              <span
+                style={styles.link}
+                onClick={() => toggleLogin(false)}>{" Sign up"}</span>
+            </p>
+          ) : (
+              <p style={{ color: 'black' }}>
+                Have an account ?
+                <span
+                  style={styles.link}
+                  onClick={() => toggleLogin(true)}>{" Log in"}</span>
+              </p>
+            )
+        }
+        <a
+          style={{ color: '#1f6f8b', cursor: 'pointer', fontSize: '12px' }}>
+          Forgot password ?
+        </a>
       </Card.Content>
     </Card>
   )
@@ -51,13 +81,40 @@ const Login = () => {
 }
 
 const styles = {
+  link: { color: '#1f6f8b', cursor: 'pointer' },
+  icon: {
+    color: 'black',
+    paddingLeft: '20px',
+    cursor: 'pointer'
+  },
   icons: {
-    color: 'black'
+    marginLeft: '30%',
+    marginRight: 'auto'
+  },
+  header: {
+    fontFamily: 'Goldman, cursive',
+    color: '#f05454',
+    fontSize: '35px',
+  },
+  subHeader: {
+    color: '#222831',
+    fontFamily: 'Goldman, cursive',
+    fontSize: '20px'
+  },
+  subAuth: {
+    color: '#222831',
+    fontFamily: 'Goldman, cursive',
+    fontSize: '15px'
   },
   container: {
     display: 'block',
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
+    background: '#e8e8e8'
+  },
+  cardLogin: {
+    fontFamily: 'Constantine',
+    color: 'black'
   }
 }
 export default Login;
