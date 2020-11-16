@@ -123,13 +123,15 @@ const styles = {
     fontFamily: 'Source Code Pro',
     fontSize: '90px',
     textAlign: 'center',
-    color: '#e8e8e8'
+    color: '#e8e8e8',
+    textShadow: '2px 2px 2px grey, 2px 2px 2px white'
   },
   subheader: {
     fontFamily: 'Stalinist One, cursive',
     color: '#f05448',
     fontSize: '40px',
     textAlign: 'center',
+    textShadow: '4px 4px black',
     focus: {
       color: '#f0a967'
     }

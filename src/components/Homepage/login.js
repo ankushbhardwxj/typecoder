@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
+import { Button, Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
 
 const SignInWith = props => {
   return (
@@ -22,17 +22,30 @@ const SignInForm = () => {
       <Card.Content>
         <Card.Header>
           <h2 style={styles.header}>TypeCode</h2>
-          <Card.Meta style={styles.subHeader}>
-            {login ? <p>Login</p> : <p>Sign Up</p>}
-          </Card.Meta>
         </Card.Header>
+        <Divider />
         <Form>
+          {!login && (
+            <>
+              <Form.Field>
+                <input placeholder='Email' />
+              </Form.Field>
+              <Form.Field>
+                <input placeholder='Full Name' />
+              </Form.Field>
+            </>
+          )}
           <Form.Field>
             <input placeholder='username/email' />
           </Form.Field>
           <Form.Field>
             <input type='password' placeholder='password' />
           </Form.Field>
+          {!login ? (
+            <Button secondary>Sign Up</Button>
+          ) : (
+              <Button secondary>Log In</Button>
+            )}
         </Form>
       </Card.Content>
       <Divider horizontal>OR</Divider>
@@ -93,8 +106,11 @@ const styles = {
   },
   header: {
     fontFamily: 'Goldman, cursive',
-    color: '#f05454',
+    color: '#f05459',
     fontSize: '35px',
+    paddingBottom: '15px',
+    paddingTop: '10px',
+    textShadow: '2px 2px black'
   },
   subHeader: {
     color: '#222831',
