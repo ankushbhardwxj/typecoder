@@ -10,3 +10,14 @@ Most typing platforms simply present stories or random words to practice which w
 - TypeCode doesn't just point out your typos but forces you to rectify them.
 - Provides detailed analysis such as heatmaps and graphs to improve your touch typing and speed.
 
+## CONTRIBUTING
+### Installation
+- Fork this repository & clone it.
+```
+git clone https://github.com/ankingcodes/typecode.git
+```
+- Type `npm install` or `yarn install` to install all packages required for the client & server.
+- Make sure you have MongoDB installed, type `sudo service mongodb start` to start it on your local machine.
+- Run `yarn start` in the root directory of project (for client server) & `nodemon app.js` in the server directory to start the server.  
+- If you like the project, hit the star button. 
+
