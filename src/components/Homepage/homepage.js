@@ -1,9 +1,7 @@
 import React from 'react';
-import { Button, Container, Grid } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import Typing from 'react-typing-animation';
-import { BrowserRouter, Link, Switch, Route } from 'react-router-dom';
-import Login from './login';
-import Editor from '../Editor/editor';
+import { Link } from 'react-router-dom';
 
 const Cursor = () => {
   return (

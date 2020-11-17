@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/styles/default.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/theme/monokai.min.css">
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/mode/javascript/javascript.min.js">
@@ -16,6 +17,8 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/railscasts.css" />
+
   <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link
@@ -36,6 +39,9 @@
 
 <body>
   <script src="lib/codemirror.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+  <!-- and it's easy to individually load additional languages -->
+  <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/languages/go.min.js"></script>
   <link rel="stylesheet" href="lib/codemirror.css">
   <script src="mode/javascript/javascript.js"></script>
   <noscript>You need to enable JavaScript to run this app.</noscript>

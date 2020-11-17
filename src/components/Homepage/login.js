@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { Button, Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
+import axios from 'axios';
+import { Link, Redirect, BrowserRouter } from 'react-router-dom';
 
 const SignInWith = props => {
   return (
@@ -17,6 +19,51 @@ const SignInWith = props => {
 
 const SignInForm = () => {
   const [login, toggleLogin] = useState(true);
+  const [signIn, toggleSignIn] = useState(false);
+
+  const handleSubmit = () => {
+    const email = document.getElementById('Email').value;
+    const fullName = document.getElementById('FullName').value;
+    const userName = document.getElementById('Username').value;
+    const password = document.getElementById('Password').value;
+    axios({
+      method: 'POST',
+      url: 'http://localhost:8080/user/signup',
+      data: {
+        email: email,
+        fullName: fullName,
+        username: userName,
+        password: password
+      }
+    })
+      .then(r => console.log('POST METHOD DONE !'))
+      .catch(err => console.log('ERROR !' + err))
+  }
+
+  const handleSignIn = () => {
+    const userName = document.getElementById('Username').value;
+    const password = document.getElementById('Password').value;
+    axios({
+      method: 'POST',
+      url: 'http://localhost:8080/user/signin',
+      data: {
+        username: userName,
+        password: password
+      }
+    })
+      .then(() => {
+        console.log('POST (Sign in) Done !');
+        toggleSignIn(!signIn);
+      })
+      .catch(err => console.log(err))
+  }
+
+  if (signIn) {
+    return (
+      <Redirect to='/app/code' />
+    )
+  }
+
   return (
     <Card style={styles.container}>
       <Card.Content>
@@ -28,23 +75,23 @@ const SignInForm = () => {
           {!login && (
             <>
               <Form.Field>
-                <input placeholder='Email' />
+                <input id='Email' placeholder='Email' />
               </Form.Field>
               <Form.Field>
-                <input placeholder='Full Name' />
+                <input id='FullName' placeholder='Full Name' />
               </Form.Field>
             </>
           )}
           <Form.Field>
-            <input placeholder='username/email' />
+            <input id='Username' placeholder='Username' />
           </Form.Field>
           <Form.Field>
-            <input type='password' placeholder='password' />
+            <input id='Password' type='password' placeholder='Password' />
           </Form.Field>
           {!login ? (
-            <Button secondary>Sign Up</Button>
+            <Button onClick={handleSubmit} secondary>Sign Up</Button>
           ) : (
-              <Button secondary>Log In</Button>
+              <Button onClick={handleSignIn} secondary>Log In</Button>
             )}
         </Form>
       </Card.Content>
