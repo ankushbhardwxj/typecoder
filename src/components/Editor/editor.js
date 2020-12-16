@@ -30,7 +30,10 @@ class Editor extends React.Component {
       totalTyped: 0,
       pressedKey: '',
       gameOver: false,
-      returnActive: false,
+      incorrect: false,
+      incorrectSpanIdx: null,
+      incorrectLetters: [],
+      correctLetters: []
     }
     this.codeRef = React.createRef();
     this.textInput = React.createRef();
@@ -52,40 +55,58 @@ class Editor extends React.Component {
   }
 
   handleKeyDown(e){
+    // Keep focus on document after hitting tab, extra +1 for cursor to move 2 step
     if(e.keyCode == 9 && e.shiftKey == false){
       e.preventDefault();
       this.setState({
         idx: this.state.idx + 1 
       })
     }
+    // Correct and Incorrect Mechanism
     let activeKey = e.key;
     let ele = document.getElementById(this.state.idx).innerText;
-    if(activeKey != "Tab" || activeKey != "Shift"){
-      if(ele == activeKey) console.log("Correct")
-      else console.log("typo")
-    }
-    if(activeKey == "Enter"){
-      this.setState({returnActive: !this.state.returnActive});
-    }
+    if(activeKey != "Backspace" && activeKey != "Shift" && activeKey != "Enter" && activeKey != "Tab"){
+      // check for incorrect
+      if(ele != activeKey){
+        this.setState({
+          incorrect: true,
+          incorrectSpanIdx: this.state.idx,
+          incorrectLetters: [...this.state.incorrectLetters, activeKey]
+        }) 
+      } else {
+        this.setState({
+          incorrect: false,
+          correctLetters: [...this.state.correctLetters, activeKey]
+        }) 
+      }
+    } 
+    // GAME OVER: When cursor reaches last character
     if(this.state.idx >= this.state.size-1){
       this.setState({gameOver: true}) 
     }
+
     if(!this.state.gameOver){
+      // on hitting backspace move cursor back
       if(activeKey == 'Backspace'){
-        this.setState({
-          idx: this.state.idx - 1,
-          pressedKey: activeKey,
-          totalTyped: this.state.totalTyped + 1,
-          delete: true
-        })    
+        if(this.state.idx>0){
+          this.setState({
+            idx: this.state.idx - 1, 
+            pressedKey: activeKey,
+            totalTyped: this.state.totalTyped + 1, 
+            delete: true
+          })    
+        }
       } 
       else if(activeKey != 'Shift') {
-        this.setState({
-          idx: this.state.idx + 1,
-          pressedKey: activeKey,
-          totalTyped: this.state.totalTyped + 1,
-          delete: false
-        });
+        // on hitting anything else other than shift, move cursor forward
+        if(!this.state.incorrect){
+          this.setState({
+            idx: this.state.idx + 1, 
+            pressedKey: activeKey,
+            totalTyped: this.state.totalTyped + 1,
+            delete: false
+          });
+        } 
       }
     }
   }
@@ -123,44 +144,33 @@ class Editor extends React.Component {
                 // give certain classnames for different entities
                 let chrCode = chr.charCodeAt(chr.length - 1);
                 if(idx == this.state.idx){
+                  // render component for Enter
                   if (chrCode == 10) {
                     return (
-                      <Cursor
-                      key={idx}
-                      class={'return'}
-                      activeKey={idx}
-                      pressedKey={this.state.pressedKey}
-                      currentChar={chr}
-                    > 
-                         ↵
-                        {chr}
-                      </Cursor>
+                      <Cursor key={idx} class={'return'} activeKey={idx} children={`↵ ${chr}`}/>
                     )
-                  } else return (
-                    <Cursor
-                      key={idx}
-                      class={'active'}
-                      activeKey={idx}
-                      pressedKey={this.state.pressedKey}
-                      currentChar={chr}
-                    >
-                      {chr}
-                    </Cursor>
-                  ) 
-                } else {
-                   return(
-                      <Cursor
-                        key={idx}
-                        class={'inactive'}
-                        pressedKey={this.state.pressedKey}
-                        activeKey={idx}
-                        currentChar={chr}
-                       >
-                        {chr}
-                      </Cursor>
-                    )   
-                }}
-              )}
+                  } 
+                  // render component for current cursor position 
+                      return (
+                        <Cursor key={idx} class={`active`} activeKey={idx} children={chr} />
+                    ) 
+                  } else {
+                  // render component for all other char except cursor
+                    // TODO: don't renew already traversed nodes
+                  if(this.state.idx > idx){
+                    if(this.state.incorrect && idx == this.state.incorrectSpanIdx)
+                     return(
+                       <Cursor key={idx} class={`incorrect`} activeKey={idx} children={chr}/>
+                     )
+                    else return (
+                       <Cursor key={idx} class={`done`} activeKey={idx} children={chr}/>
+                    )
+                  }
+                  else return (
+                    <Cursor key={idx} activeKey={idx} children={chr}/>
+                  )
+                }
+              })}
             </code>
         </pre>}
         {this.state.gameOver && <GameOverComponent />}
