@@ -6,3 +6,11 @@
   color: white;
   background-color: green;
 }
+
+.return {
+  background-color: #fc5203;
+  padding-left: 7px;
+  padding-right: 3px;
+  color: white;
+  font-size: 14px;
+}

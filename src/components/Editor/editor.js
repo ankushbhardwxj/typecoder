@@ -9,33 +9,6 @@ import { Container } from 'semantic-ui-react';
 // also this needs a popping animation resembling to VIM
 const Cursor = props => {
   useEffect(() => {
-    /*
-    if(props.active >= 0 && props.active <= props.size){
-      if(props.active >= 1){
-        let prevStyle, cursorStyle;
-        if(document.getElementById(String(props.active)) !== null){
-          console.log(document.getElementById(props.active).value);
-          cursorStyle = document.getElementById(String(props.active)).style;
-          cursorStyle.background = 'green'
-          cursorStyle.color = "white"
-        }
-        if(document.getElementById(String(props.active - 1)) !== null){
-          if(props.delete == false)
-            prevStyle = document.getElementById(String(props.active - 1)).style;
-          else prevStyle = document.getElementById(String(props.active + 1)).style;
-          prevStyle.background = "white";
-          prevStyle.color = "black";
-        }
-      } else {
-        const cursorStyle = document.getElementById(String(props.active)).style;
-        cursorStyle.background = 'green'
-        cursorStyle.color = "white"
-        let prevStyle = document.getElementById(String(props.active+1)).style;
-        prevStyle.background = "white";
-        prevStyle.color = "black";
-      }
-    } */
-    console.log(props)
   })
   return (
     <span 
@@ -50,13 +23,14 @@ class Editor extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      totalTyped: 0,
       idx: 0,
+      code: '',
       pause: false,
-      pressedKey: '',
       delete: false,
-      size: 0,
-      gameOver: false
+      totalTyped: 0,
+      pressedKey: '',
+      gameOver: false,
+      returnActive: false,
     }
     this.codeRef = React.createRef();
     this.textInput = React.createRef();
@@ -67,20 +41,32 @@ class Editor extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('keyup', this.handleKeyDown)
+    document.addEventListener('keydown', this.handleKeyDown)
     this.codeRef.current.addEventListener('click', this.handleClick);
-    this.setState({size: [...data].length - 1});
+    this.setState({code: data, size: [...data].length - 1});
   }
 
   handleClick(evt) {
     this.codeRef.current.focus();
-    this.codeRef.current.addEventListener('keyup', this.handleKeyDown);
-    console.log('clicked');
+    this.codeRef.current.addEventListener('keypress', this.handleKeyDown);
   }
 
   handleKeyDown(e){
+    if(e.keyCode == 9 && e.shiftKey == false){
+      e.preventDefault();
+      this.setState({
+        idx: this.state.idx + 1 
+      })
+    }
     let activeKey = e.key;
-    console.log(activeKey)
+    let ele = document.getElementById(this.state.idx).innerText;
+    if(activeKey != "Tab" || activeKey != "Shift"){
+      if(ele == activeKey) console.log("Correct")
+      else console.log("typo")
+    }
+    if(activeKey == "Enter"){
+      this.setState({returnActive: !this.state.returnActive});
+    }
     if(this.state.idx >= this.state.size-1){
       this.setState({gameOver: true}) 
     }
@@ -106,12 +92,12 @@ class Editor extends React.Component {
 
   handlePauseClick(){
     if(this.state.pause) 
-      this.setState({pause: !this.state.pause})
+      this.setState({pause: !this.state.pause});
   }
   
   handleUnpauseClick(){
     if(!this.state.pause) 
-      this.setState({pause: !this.state.pause})
+      this.setState({pause: !this.state.pause});
   }
 
   render() {
@@ -132,16 +118,31 @@ class Editor extends React.Component {
             <code 
               ref={this.codeRef} 
               className={'javascript'} 
-              onKeyPress={this.handleKeyDown}>
-              {[...data].map((chr, idx) => {
+            >
+              {[...this.state.code].map((chr, idx) => {
                 // give certain classnames for different entities
                 let chrCode = chr.charCodeAt(chr.length - 1);
-                if(idx == 0){
-                  return (
+                if(idx == this.state.idx){
+                  if (chrCode == 10) {
+                    return (
+                      <Cursor
+                      key={idx}
+                      class={'return'}
+                      activeKey={idx}
+                      pressedKey={this.state.pressedKey}
+                      currentChar={chr}
+                    > 
+                         ↵
+                        {chr}
+                      </Cursor>
+                    )
+                  } else return (
                     <Cursor
                       key={idx}
                       class={'active'}
                       activeKey={idx}
+                      pressedKey={this.state.pressedKey}
+                      currentChar={chr}
                     >
                       {chr}
                     </Cursor>
@@ -151,12 +152,14 @@ class Editor extends React.Component {
                       <Cursor
                         key={idx}
                         class={'inactive'}
+                        pressedKey={this.state.pressedKey}
                         activeKey={idx}
+                        currentChar={chr}
                        >
                         {chr}
                       </Cursor>
                     )   
-                  }}
+                }}
               )}
             </code>
         </pre>}
