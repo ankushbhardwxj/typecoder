@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import data from '../../code';
 import "./editor.css";
-import highlight from 'highlight.js';
 import { findDOMNode } from 'react-dom';
 import { Container } from 'semantic-ui-react';
 
@@ -10,11 +9,12 @@ import { Container } from 'semantic-ui-react';
 // also this needs a popping animation resembling to VIM
 const Cursor = props => {
   useEffect(() => {
-    console.log(props)
+    /*
     if(props.active >= 0 && props.active <= props.size){
       if(props.active >= 1){
         let prevStyle, cursorStyle;
         if(document.getElementById(String(props.active)) !== null){
+          console.log(document.getElementById(props.active).value);
           cursorStyle = document.getElementById(String(props.active)).style;
           cursorStyle.background = 'green'
           cursorStyle.color = "white"
@@ -34,11 +34,15 @@ const Cursor = props => {
         prevStyle.background = "white";
         prevStyle.color = "black";
       }
-    } 
+    } */
+    console.log(props)
   })
-
   return (
-    <span id={props.id}>{props.children}</span>
+    <span 
+      className={props.class} 
+      id={props.activeKey}>
+        {props.children}
+    </span>
   )
 }
 
@@ -58,28 +62,26 @@ class Editor extends React.Component {
     this.textInput = React.createRef();
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handlePauseClick = this.handlePauseClick.bind(this);
+    this.handleUnpauseClick = this.handleUnpauseClick.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('keyup', this.handleKeyDown)
     this.codeRef.current.addEventListener('click', this.handleClick);
-    this.setState({size: [...data].length});
-  }
-
-  componentDidUpdate() {
+    this.setState({size: [...data].length - 1});
   }
 
   handleClick(evt) {
     this.codeRef.current.focus();
     this.codeRef.current.addEventListener('keyup', this.handleKeyDown);
-    this.setState({pause: !this.state.pause});
     console.log('clicked');
   }
 
   handleKeyDown(e){
     let activeKey = e.key;
     console.log(activeKey)
-    if(this.state.totalTyped > this.state.size){
+    if(this.state.idx >= this.state.size-1){
       this.setState({gameOver: true}) 
     }
     if(!this.state.gameOver){
@@ -102,40 +104,84 @@ class Editor extends React.Component {
     }
   }
 
+  handlePauseClick(){
+    if(this.state.pause) 
+      this.setState({pause: !this.state.pause})
+  }
+  
+  handleUnpauseClick(){
+    if(!this.state.pause) 
+      this.setState({pause: !this.state.pause})
+  }
+
   render() {
     return (
       <div
         className="code-container" 
+        onClick={this.handleUnpauseClick}
         style={{background: 'gray'}}
       >
-        <h1>Total Typed: {this.state.totalTyped}</h1>
-        {this.state.pause ? <div>Paused</div>: <div>Typing</div>}
-        {!this.state.gameOver && <pre 
-          style={{background:'white', fontWeight:'bold'}}>
+        <Header 
+          totalTyped={this.state.totalTyped}
+          pause={this.props.pause}
+        />
+        {!this.state.gameOver && 
+          <pre 
+            onClick={this.handlePauseClick}
+            style={{background:'white',fontWeight:'bold',paddingLeft: '20px'}}>
             <code 
               ref={this.codeRef} 
               className={'javascript'} 
               onKeyPress={this.handleKeyDown}>
-              {[...data].map((chr, idx) => 
-                <Cursor 
-                  key={idx} 
-                  active={this.state.idx} 
-                  delete={this.state.delete}
-                  size={[...data].length}
-                  id={idx}>
-                    {chr}
-                </Cursor>
+              {[...data].map((chr, idx) => {
+                // give certain classnames for different entities
+                let chrCode = chr.charCodeAt(chr.length - 1);
+                if(idx == 0){
+                  return (
+                    <Cursor
+                      key={idx}
+                      class={'active'}
+                      activeKey={idx}
+                    >
+                      {chr}
+                    </Cursor>
+                  ) 
+                } else {
+                   return(
+                      <Cursor
+                        key={idx}
+                        class={'inactive'}
+                        activeKey={idx}
+                       >
+                        {chr}
+                      </Cursor>
+                    )   
+                  }}
               )}
             </code>
         </pre>}
-        {this.state.gameOver && 
-          <div style={{background: 'white', fontWeight: 'bold'}}>
-            <h3>GAME OVER</h3>
-          </div>
-        }
+        {this.state.gameOver && <GameOverComponent />}
       </div>
     )
   }
 }
 
+const GameOverComponent = () => (
+  <div style={{background: 'white', fontWeight: 'bold'}}>
+    <h3>GAME OVER</h3>
+    <img src="https://i.ytimg.com/vi/XdBrFPqSMpo/hqdefault.jpg"/>
+  </div>
+)
+
+const Header = props => {
+ return (
+   <>
+     <h1 style={{paddingLeft: '20px'}}>Total Typed: {props.totalTyped}</h1>
+     {props.pause && <div style={{paddingLeft:'20px'}}>Paused</div>}
+     {!props.pause && <div style={{paddingLeft:'20px'}}>Typing</div>}
+   </>
+ )
+}
+
 export default Editor;
+
