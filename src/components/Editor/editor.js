@@ -32,7 +32,7 @@ class Editor extends React.Component {
       gameOver: false,
       incorrect: false,
       incorrectSpanIdx: null,
-      incorrectLetters: [],
+      incorrectLetters: "",
       correctLetters: []
     }
     this.codeRef = React.createRef();
@@ -55,6 +55,8 @@ class Editor extends React.Component {
   }
 
   handleKeyDown(e){
+    let activeKey = e.key;
+    let ele = document.getElementById(this.state.idx).innerText;
     // Keep focus on document after hitting tab, extra +1 for cursor to move 2 step
     if(e.keyCode == 9 && e.shiftKey == false){
       e.preventDefault();
@@ -62,24 +64,29 @@ class Editor extends React.Component {
         idx: this.state.idx + 1 
       })
     }
-    // Correct and Incorrect Mechanism
-    let activeKey = e.key;
-    let ele = document.getElementById(this.state.idx).innerText;
-    if(activeKey != "Backspace" && activeKey != "Shift" && activeKey != "Enter" && activeKey != "Tab"){
-      // check for incorrect
-      if(ele != activeKey){
-        this.setState({
-          incorrect: true,
-          incorrectSpanIdx: this.state.idx,
-          incorrectLetters: [...this.state.incorrectLetters, activeKey]
-        }) 
-      } else {
-        this.setState({
-          incorrect: false,
-          correctLetters: [...this.state.correctLetters, activeKey]
-        }) 
-      }
+    // if user hits backspace and comes back to wrong pos, make it right
+    console.log("->",this.state.incorrect, this.state.incorrectSpanIdx, this.state.incorrectLetters);
+    if(this.state.incorrect && this.state.incorrectSpanIdx != null && this.state.incorrectLetters != "") {
+      console.log('not incorrect')
+      this.setState({
+        incorrect: false,
+        incorrectSpanIdx: null,
+        incorrectLetters: ''
+      }) 
     } 
+      // Correct and Incorrect Mechanism
+      if(activeKey != "Backspace" && activeKey != "Shift" && activeKey != "Enter" && activeKey != "Tab"){
+        // check for incorrect
+        if(ele != activeKey && !this.state.incorrect 
+          && this.state.incorrectSpanIdx == null && this.state.incorrectLetters == ""){
+          console.log('incorrect')
+          this.setState({
+            incorrect: true,
+            incorrectSpanIdx: this.state.idx,
+            incorrectLetters: activeKey
+          }) 
+        } 
+      }
     // GAME OVER: When cursor reaches last character
     if(this.state.idx >= this.state.size-1){
       this.setState({gameOver: true}) 
@@ -99,16 +106,15 @@ class Editor extends React.Component {
       } 
       else if(activeKey != 'Shift') {
         // on hitting anything else other than shift, move cursor forward
-        if(!this.state.incorrect){
-          this.setState({
-            idx: this.state.idx + 1, 
-            pressedKey: activeKey,
-            totalTyped: this.state.totalTyped + 1,
-            delete: false
-          });
-        } 
+        this.setState({
+          idx: this.state.idx + 1, 
+          pressedKey: activeKey,
+          totalTyped: this.state.totalTyped + 1,
+          delete: false
+        });
       }
     }
+    console.log(this.state.incorrect, this.state.incorrectSpanIdx, this.state.incorrectLetters);
   }
 
   handlePauseClick(){
@@ -151,9 +157,13 @@ class Editor extends React.Component {
                     )
                   } 
                   // render component for current cursor position 
+                    if(!this.state.incorrect)
                       return (
                         <Cursor key={idx} class={`active`} activeKey={idx} children={chr} />
-                    ) 
+                      ) 
+                    else return (
+                      <Cursor key={idx} class={`active-arrow`} activeKey={idx} children={'<='} />
+                    )
                   } else {
                   // render component for all other char except cursor
                     // TODO: don't renew already traversed nodes
