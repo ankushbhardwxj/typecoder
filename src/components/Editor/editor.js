@@ -55,38 +55,22 @@ class Editor extends React.Component {
   }
 
   handleKeyDown(e){
-    let activeKey = e.key;
-    let ele = document.getElementById(this.state.idx).innerText;
+    let activeKey, ele;
+    if(!this.state.gameOver){
+      activeKey = e.key;
+      ele = document.getElementById(this.state.idx).innerText;
+    }
     // Keep focus on document after hitting tab, extra +1 for cursor to move 2 step
     if(e.keyCode == 9 && e.shiftKey == false){
       e.preventDefault();
-      this.setState({
-        idx: this.state.idx + 1 
-      })
-    }
-    // if user hits backspace and comes back to wrong pos, make it right
-    console.log("->",this.state.incorrect, this.state.incorrectSpanIdx, this.state.incorrectLetters);
-    if(this.state.incorrect && this.state.incorrectSpanIdx != null && this.state.incorrectLetters != "") {
-      console.log('not incorrect')
-      this.setState({
-        incorrect: false,
-        incorrectSpanIdx: null,
-        incorrectLetters: ''
-      }) 
-    } 
-      // Correct and Incorrect Mechanism
-      if(activeKey != "Backspace" && activeKey != "Shift" && activeKey != "Enter" && activeKey != "Tab"){
-        // check for incorrect
-        if(ele != activeKey && !this.state.incorrect 
-          && this.state.incorrectSpanIdx == null && this.state.incorrectLetters == ""){
-          console.log('incorrect')
-          this.setState({
-            incorrect: true,
-            incorrectSpanIdx: this.state.idx,
-            incorrectLetters: activeKey
-          }) 
-        } 
+      let tabbedChr = document.getElementById(this.state.idx).innerText;
+      let tabbedChrCode = tabbedChr.charCodeAt(tabbedChr.length - 1);
+      if(tabbedChrCode == 32){
+        this.setState({
+          idx: this.state.idx + 2 
+        })
       }
+    }
     // GAME OVER: When cursor reaches last character
     if(this.state.idx >= this.state.size-1){
       this.setState({gameOver: true}) 
@@ -104,7 +88,7 @@ class Editor extends React.Component {
           })    
         }
       } 
-      else if(activeKey != 'Shift') {
+      else if(activeKey != 'Shift' && activeKey != 'Tab') {
         // on hitting anything else other than shift, move cursor forward
         this.setState({
           idx: this.state.idx + 1, 
@@ -114,7 +98,28 @@ class Editor extends React.Component {
         });
       }
     }
-    console.log(this.state.incorrect, this.state.incorrectSpanIdx, this.state.incorrectLetters);
+    // if user hits backspace and comes back to wrong pos, make it right
+    if(this.state.incorrect && 
+        this.state.incorrectSpanIdx != null && 
+        this.state.incorrectLetters.length>0 && (this.state.incorrectSpanIdx == this.state.idx)) {
+      this.setState({
+        incorrect: false,
+        incorrectSpanIdx: null,
+        incorrectLetters: ''
+      }) 
+    } 
+    // Correct and Incorrect Mechanism
+    if(activeKey != "Backspace" && activeKey != "Shift" && activeKey != "Enter" && activeKey != "Tab"){
+      // check for incorrect
+      if(ele != activeKey && !this.state.incorrect 
+        && this.state.incorrectSpanIdx == null && this.state.incorrectLetters == ""){
+        this.setState({
+          incorrect: true,
+          incorrectSpanIdx: this.state.idx-1,
+          incorrectLetters: activeKey
+        }) 
+      } 
+    }
   }
 
   handlePauseClick(){
@@ -166,9 +171,8 @@ class Editor extends React.Component {
                     )
                   } else {
                   // render component for all other char except cursor
-                    // TODO: don't renew already traversed nodes
-                  if(this.state.idx > idx){
-                    if(this.state.incorrect && idx == this.state.incorrectSpanIdx)
+                  if(this.state.idx >= idx){
+                    if(this.state.incorrect && (idx) == this.state.incorrectSpanIdx)
                      return(
                        <Cursor key={idx} class={`incorrect`} activeKey={idx} children={chr}/>
                      )
@@ -192,7 +196,7 @@ class Editor extends React.Component {
 const GameOverComponent = () => (
   <div style={{background: 'white', fontWeight: 'bold'}}>
     <h3>GAME OVER</h3>
-    <img src="https://i.ytimg.com/vi/XdBrFPqSMpo/hqdefault.jpg"/>
+    <img alt="Naruto" src="https://i.ytimg.com/vi/XdBrFPqSMpo/hqdefault.jpg"/>
   </div>
 )
 
