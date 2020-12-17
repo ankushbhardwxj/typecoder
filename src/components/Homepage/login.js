@@ -188,7 +188,7 @@ const styles = {
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-    //background: '#e8e8e8'
+    background: '#ffff'
   },
   cardLogin: {
     fontFamily: 'Constantine',
