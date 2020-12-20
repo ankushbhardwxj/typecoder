@@ -8,8 +8,6 @@ import { Container } from 'semantic-ui-react';
 // TODO: Improve this cursor to be like that of Google DOCS
 // also this needs a popping animation resembling to VIM
 const Cursor = props => {
-  useEffect(() => {
-  })
   return (
     <span 
       className={props.class} 
@@ -33,7 +31,8 @@ class Editor extends React.Component {
       incorrect: false,
       incorrectSpanIdx: null,
       incorrectLetters: "",
-      correctLetters: []
+      correctLetters: [],
+      allIncorrect: []
     }
     this.codeRef = React.createRef();
     this.textInput = React.createRef();
@@ -116,9 +115,14 @@ class Editor extends React.Component {
         this.setState({
           incorrect: true,
           incorrectSpanIdx: this.state.idx-1,
-          incorrectLetters: activeKey
+          incorrectLetters: activeKey,
+          allIncorrect: [...this.state.allIncorrect, ele]
         }) 
-      } 
+      } else {
+        this.setState({
+          correctLetters: [...this.state.correctLetters, activeKey]  
+        }) 
+      }
     }
   }
 
@@ -149,7 +153,7 @@ class Editor extends React.Component {
             style={{background:'white',fontWeight:'bold',paddingLeft: '20px'}}>
             <code 
               ref={this.codeRef} 
-              className={'javascript'} 
+              className={'python'} 
             >
               {[...this.state.code].map((chr, idx) => {
                 // give certain classnames for different entities
