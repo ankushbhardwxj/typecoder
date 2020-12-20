@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { Button, Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
 import axios from 'axios';
 import { Link, Redirect, BrowserRouter } from 'react-router-dom';
+const baseURI = 'http://localhost';
+const port = 8080;
 
 const SignInWith = props => {
   return (
@@ -20,19 +22,30 @@ const SignInWith = props => {
 const SignInForm = () => {
   const [login, toggleLogin] = useState(true);
   const [signIn, toggleSignIn] = useState(false);
+  const [email, setEmail] = useState('');
+  const [fullname, setfullname] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleUserInput = (key, value) => {
+    if (key == 'username')
+      setUsername(value);
+    if (key == 'password')
+      setPassword(value);
+    if (!login && key == 'fullname')
+      setfullname(value);
+    if (!login && key == 'email')
+      setEmail(value);
+  }
 
   const handleSubmit = () => {
-    const email = document.getElementById('Email').value;
-    const fullName = document.getElementById('FullName').value;
-    const userName = document.getElementById('Username').value;
-    const password = document.getElementById('Password').value;
     axios({
       method: 'POST',
-      url: 'http://localhost:8080/user/signup',
+      url: `${baseURI}:${port}/user/signup`,
       data: {
         email: email,
-        fullName: fullName,
-        username: userName,
+        fullName: fullname,
+        username: username,
         password: password
       }
     })
@@ -40,14 +53,12 @@ const SignInForm = () => {
       .catch(err => console.log('ERROR !' + err))
   }
 
-  const handleSignIn = () => {
-    const userName = document.getElementById('Username').value;
-    const password = document.getElementById('Password').value;
-    axios({
+  const handleSignIn = async () => {
+    let axiosRequest = await axios({
       method: 'POST',
-      url: 'http://localhost:8080/user/signin',
+      url: `${baseURI}:${port}/user/signin`,
       data: {
-        username: userName,
+        username: username,
         password: password
       }
     })
@@ -60,7 +71,7 @@ const SignInForm = () => {
 
   if (signIn) {
     return (
-      <Redirect to='/app/code' />
+      <Redirect to={`/app/users/${username}/profile`} />
     )
   }
 
@@ -75,18 +86,23 @@ const SignInForm = () => {
           {!login && (
             <>
               <Form.Field>
-                <input id='Email' placeholder='Email' />
+                <input onChange={(e) => handleUserInput('email', e.target.value)}
+                  id='Email'
+                  placeholder='Email' />
               </Form.Field>
               <Form.Field>
-                <input id='FullName' placeholder='Full Name' />
+                <input onChange={(e) => handleUserInput('fullName', e.target.value)}
+                  id='FullName' placeholder='Full Name' />
               </Form.Field>
             </>
           )}
           <Form.Field>
-            <input id='Username' placeholder='Username' />
+            <input onChange={e => handleUserInput('username', e.target.value)}
+              id='Username' placeholder='Username' />
           </Form.Field>
           <Form.Field>
-            <input id='Password' type='password' placeholder='Password' />
+            <input onChange={e => handleUserInput('password', e.target.value)}
+              id='Password' type='password' placeholder='Password' />
           </Form.Field>
           {!login ? (
             <Button onClick={handleSubmit} secondary>Sign Up</Button>
@@ -134,7 +150,7 @@ const SignInForm = () => {
 
 const Login = () => {
   return (
-    <Container textAlign="center">
+    <Container textAlign="center" style={{ paddingTop: '60px' }}>
       <SignInForm />
     </Container>
   )
@@ -173,7 +189,7 @@ const styles = {
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-    background: '#e8e8e8'
+    background: '#e8e8e8',
   },
   cardLogin: {
     fontFamily: 'Constantine',

@@ -13,19 +13,27 @@ const Cursor = () => {
   )
 }
 
-const Header = props => {
+export const Logo = props => {
   return (
-    <div>
+    <React.Fragment>
       <Typing
         loop={true}
         startDelay={title.delay}
         cursor={<Cursor />}
         speed={title.fontSpeed}
       >
-        <p style={styles.header}>{props.title}☕</p>
+        <p style={props.style}>{props.title}☕</p>
         <Typing.Delay ms={1000} />
         <Typing.Backspace count={15} />
       </Typing>
+    </React.Fragment>
+  )
+}
+
+const Header = props => {
+  return (
+    <div>
+      <Logo title={props.title} style={styles.header} />
       <img
         style={styles.image}
         src={`${process.env.PUBLIC_URL}/image.PNG`}
@@ -145,6 +153,9 @@ const styles = {
     listStyleType: 'none',
     paddingBottom: '11px',
     textAlign: 'center'
+  },
+  container: {
+    paddingTop: '60px'
   }
 }
 export default HomePage;
