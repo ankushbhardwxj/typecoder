@@ -4,8 +4,7 @@ import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { Button, Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
 import axios from 'axios';
 import { Link, Redirect, BrowserRouter } from 'react-router-dom';
-const baseURI = 'http://localhost';
-const port = 8080;
+import { baseURI, port } from '../../config';
 
 const SignInWith = props => {
   return (
