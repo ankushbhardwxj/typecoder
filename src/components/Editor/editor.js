@@ -9,16 +9,16 @@ import { Container } from 'semantic-ui-react';
 // also this needs a popping animation resembling to VIM
 const Cursor = props => {
   return (
-    <span 
-      className={props.class} 
+    <span
+      className={props.class}
       id={props.activeKey}>
-        {props.children}
+      {props.children}
     </span>
   )
 }
 
 class Editor extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       idx: 0,
@@ -45,7 +45,7 @@ class Editor extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown)
     this.codeRef.current.addEventListener('click', this.handleClick);
-    this.setState({code: data, size: [...data].length - 1});
+    this.setState({ code: data, size: [...data].length - 1 });
   }
 
   handleClick(evt) {
@@ -53,44 +53,44 @@ class Editor extends React.Component {
     this.codeRef.current.addEventListener('keypress', this.handleKeyDown);
   }
 
-  handleKeyDown(e){
+  handleKeyDown(e) {
     let activeKey, ele;
-    if(!this.state.gameOver){
+    if (!this.state.gameOver) {
       activeKey = e.key;
       ele = document.getElementById(this.state.idx).innerText;
     }
     // Keep focus on document after hitting tab, extra +1 for cursor to move 2 step
-    if(e.keyCode == 9 && e.shiftKey == false){
+    if (e.keyCode == 9 && e.shiftKey == false) {
       e.preventDefault();
       let tabbedChr = document.getElementById(this.state.idx).innerText;
       let tabbedChrCode = tabbedChr.charCodeAt(tabbedChr.length - 1);
-      if(tabbedChrCode == 32){
+      if (tabbedChrCode == 32) {
         this.setState({
-          idx: this.state.idx + 2 
+          idx: this.state.idx + 2
         })
       }
     }
     // GAME OVER: When cursor reaches last character
-    if(this.state.idx >= this.state.size-1){
-      this.setState({gameOver: true}) 
+    if (this.state.idx >= this.state.size - 1) {
+      this.setState({ gameOver: true })
     }
 
-    if(!this.state.gameOver){
+    if (!this.state.gameOver) {
       // on hitting backspace move cursor back
-      if(activeKey == 'Backspace'){
-        if(this.state.idx>0){
+      if (activeKey == 'Backspace') {
+        if (this.state.idx > 0) {
           this.setState({
-            idx: this.state.idx - 1, 
+            idx: this.state.idx - 1,
             pressedKey: activeKey,
-            totalTyped: this.state.totalTyped + 1, 
+            totalTyped: this.state.totalTyped + 1,
             delete: true
-          })    
+          })
         }
-      } 
-      else if(activeKey != 'Shift' && activeKey != 'Tab') {
+      }
+      else if (activeKey != 'Shift' && activeKey != 'Tab') {
         // on hitting anything else other than shift, move cursor forward
         this.setState({
-          idx: this.state.idx + 1, 
+          idx: this.state.idx + 1,
           pressedKey: activeKey,
           totalTyped: this.state.totalTyped + 1,
           delete: false
@@ -98,99 +98,100 @@ class Editor extends React.Component {
       }
     }
     // if user hits backspace and comes back to wrong pos, make it right
-    if(this.state.incorrect && 
-        this.state.incorrectSpanIdx != null && 
-        this.state.incorrectLetters.length>0 && (this.state.incorrectSpanIdx == this.state.idx)) {
+    if (this.state.incorrect &&
+      this.state.incorrectSpanIdx != null &&
+      this.state.incorrectLetters.length > 0 && (this.state.incorrectSpanIdx == this.state.idx)) {
       this.setState({
         incorrect: false,
         incorrectSpanIdx: null,
         incorrectLetters: ''
-      }) 
-    } 
+      })
+    }
     // Correct and Incorrect Mechanism
-    if(activeKey != "Backspace" && activeKey != "Shift" && activeKey != "Enter" && activeKey != "Tab"){
+    if (activeKey != "Backspace" && activeKey != "Shift" && activeKey != "Enter" && activeKey != "Tab") {
       // check for incorrect
-      if(ele != activeKey && !this.state.incorrect 
-        && this.state.incorrectSpanIdx == null && this.state.incorrectLetters == ""){
+      if (ele != activeKey && !this.state.incorrect
+        && this.state.incorrectSpanIdx == null && this.state.incorrectLetters == "") {
         this.setState({
           incorrect: true,
-          incorrectSpanIdx: this.state.idx-1,
+          incorrectSpanIdx: this.state.idx - 1,
           incorrectLetters: activeKey,
           allIncorrect: [...this.state.allIncorrect, ele]
-        }) 
+        })
       } else {
         this.setState({
-          correctLetters: [...this.state.correctLetters, activeKey]  
-        }) 
+          correctLetters: [...this.state.correctLetters, activeKey]
+        })
       }
     }
   }
 
-  handlePauseClick(){
-    if(this.state.pause) 
-      this.setState({pause: !this.state.pause});
+  handlePauseClick() {
+    if (this.state.pause)
+      this.setState({ pause: !this.state.pause });
   }
-  
-  handleUnpauseClick(){
-    if(!this.state.pause) 
-      this.setState({pause: !this.state.pause});
+
+  handleUnpauseClick() {
+    if (!this.state.pause)
+      this.setState({ pause: !this.state.pause });
   }
 
   render() {
     return (
       <div
-        className="code-container" 
+        className="code-container"
         onClick={this.handleUnpauseClick}
-        style={{background: 'gray'}}
+        style={{ background: 'gray' }}
       >
-        <Header 
+        <Header
           totalTyped={this.state.totalTyped}
           pause={this.props.pause}
         />
-        {!this.state.gameOver && 
-          <pre 
+        {!this.state.gameOver &&
+          <pre
             onClick={this.handlePauseClick}
-            style={{background:'white',fontWeight:'bold',paddingLeft: '20px'}}>
-            <code 
-              ref={this.codeRef} 
-              className={'python'} 
+            style={{ background: '#2e2d2c', color:'white',
+            fontWeight: 'bold', paddingLeft: '20px' }}>
+            <code
+              ref={this.codeRef}
+              className={'python'}
             >
-              {[...this.state.code].map((chr, idx) => {
-                // give certain classnames for different entities
-                let chrCode = chr.charCodeAt(chr.length - 1);
-                if(idx == this.state.idx){
-                  // render component for Enter
-                  if (chrCode == 10) {
-                    return (
-                      <Cursor key={idx} class={'return'} activeKey={idx} children={`↵ ${chr}`}/>
-                    )
-                  } 
-                  // render component for current cursor position 
-                    if(!this.state.incorrect)
+                {[...this.state.code].map((chr, idx) => {
+                  // give certain classnames for different entities
+                  let chrCode = chr.charCodeAt(chr.length - 1);
+                  if (idx == this.state.idx) {
+                    // render component for Enter
+                    if (chrCode == 10) {
+                      return (
+                        <Cursor key={idx} class={'return'} activeKey={idx} children={`↵ ${chr}`} />
+                      )
+                    }
+                    // render component for current cursor position 
+                    if (!this.state.incorrect)
                       return (
                         <Cursor key={idx} class={`active`} activeKey={idx} children={chr} />
-                      ) 
+                      )
                     else return (
                       <Cursor key={idx} class={`active-arrow`} activeKey={idx} children={'<='} />
                     )
                   } else {
-                  // render component for all other char except cursor
-                  if(this.state.idx >= idx){
-                    if(this.state.incorrect && (idx) == this.state.incorrectSpanIdx)
-                     return(
-                       <Cursor key={idx} class={`incorrect`} activeKey={idx} children={chr}/>
-                     )
+                    // render component for all other char except cursor
+                    if (this.state.idx >= idx) {
+                      if (this.state.incorrect && (idx) == this.state.incorrectSpanIdx)
+                        return (
+                          <Cursor key={idx} class={`incorrect`} activeKey={idx} children={chr} />
+                        )
+                      else return (
+                        <Cursor key={idx} class={`done`} activeKey={idx} children={chr} />
+                      )
+                    }
                     else return (
-                       <Cursor key={idx} class={`done`} activeKey={idx} children={chr}/>
+                      <Cursor key={idx} activeKey={idx} children={chr} />
                     )
                   }
-                  else return (
-                    <Cursor key={idx} activeKey={idx} children={chr}/>
-                  )
-                }
-              })}
+                })}
             </code>
-        </pre>}
+          </pre>}
         {this.state.gameOver && <GameOverComponent />}
       </div>
     )
@@ -198,20 +199,20 @@ class Editor extends React.Component {
 }
 
 const GameOverComponent = () => (
-  <div style={{background: 'white', fontWeight: 'bold'}}>
+  <div style={{ background: 'white', fontWeight: 'bold' }}>
     <h3>GAME OVER</h3>
-    <img alt="Naruto" src="https://i.ytimg.com/vi/XdBrFPqSMpo/hqdefault.jpg"/>
+    <img alt="Naruto" src="https://i.ytimg.com/vi/XdBrFPqSMpo/hqdefault.jpg" />
   </div>
 )
 
 const Header = props => {
- return (
-   <>
-     <h1 style={{paddingLeft: '20px'}}>Total Typed: {props.totalTyped}</h1>
-     {props.pause && <div style={{paddingLeft:'20px'}}>Paused</div>}
-     {!props.pause && <div style={{paddingLeft:'20px'}}>Typing</div>}
-   </>
- )
+  return (
+    <>
+      <h1 style={{ paddingLeft: '20px' }}>Total Typed: {props.totalTyped}</h1>
+      {props.pause && <div style={{ paddingLeft: '20px' }}>Paused</div>}
+      {!props.pause && <div style={{ paddingLeft: '20px' }}>Typing</div>}
+    </>
+  )
 }
 
 export default Editor;
