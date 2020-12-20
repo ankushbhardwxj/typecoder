@@ -6,7 +6,8 @@ const userSchema = mongoose.Schema({
   fullName: { type: String, required: true },
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  lessons: [{
+  date: { type: Date, default: Date.now },
+  public_lessons: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Lesson'
   }]

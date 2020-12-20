@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const PORT = 8080;
 // fetch routes
-const userRoutes = require('./routes/User');
+const authRoutes = require('./routes/auth');
+const userInfoRoutes = require('./routes/users');
 
 mongoose.connect('mongodb://localhost:27017/typecode', {
   useNewUrlParser: true
@@ -29,7 +30,8 @@ app.use((req, res, next) => {
   }
   next();
 })
-app.use('/user', userRoutes);
+app.use('/user', authRoutes);
+app.use('/users', userInfoRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running at PORT:${PORT}`);
