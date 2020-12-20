@@ -9,8 +9,13 @@ import {
 } from 'react-router-dom';
 import Login from './components/Homepage/login';
 import { Container } from 'semantic-ui-react';
+import ProfilePage from './components/ProfilePage/ProfilePage';
 
 const routes = [
+  {
+    path: '/app/users/:user/profile',
+    main: () => <ProfilePage />
+  },
   {
     path: '/app/code',
     exact: true,
@@ -39,7 +44,7 @@ const App = () => {
   return (
     <div style={styles.container}>
       <Router>
-        <Container fluid style={{ paddingTop: '60px' }}>
+        <Container fluid >
           <Switch>
             {routes.map((route, idx) => (
               <Route
