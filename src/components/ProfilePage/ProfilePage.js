@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Image } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import axios from 'axios';
 import { baseURI, port } from '../../config';
+import ProfileCard from './ProfileCard';
+import LessonList from './LessonList';
+import { Grid, Container } from 'semantic-ui-react';
 
 const ProfilePage = props => {
   let { user } = useParams();
@@ -14,6 +16,7 @@ const ProfilePage = props => {
   let [dateOfJoin, setDateOfJoin] = useState('');
 
   useEffect(() => {
+    // TODO: fix multiple render issue here
     axios({
       method: 'GET',
       url: `${baseURI}:${port}/users/${user}/info`,
@@ -30,29 +33,30 @@ const ProfilePage = props => {
       .catch(e => console.log(e));
   }, [firstRender])
 
-  const getJoinDate = (timestamp) => {
-    const date = String(timestamp).split('T')[0];
-    const dateString = new Date(date).toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
-    })
-    return dateString;
-  }
-
   return (
     <React.Fragment>
       <NavBar />
-      <Container style={styles.container}>
-        <Image src='https://avatars1.githubusercontent.com/u/47313528?s=88&v=4'
-          size='small' circular
-          onMouseOver={() => { }} />
-        <div>
-          <h1>{username}</h1>
-          <h2>{email}</h2>
-          <h2>{fullName}</h2>
-          <h2>{getJoinDate(dateOfJoin)}</h2>
-        </div>
+      <Container>
+        <Grid columns={2} divided>
+          <Grid.Row>
+            <Grid.Column>
+              <ProfileCard
+                style={styles.container}
+                profilePic='https://avatars0.githubusercontent.com/u/40923324?s=460&u=ec2ab2c495c1f5ea6b3c9ba1a3717a351236c92e&v=4'
+                fullName={fullName}
+                username={username}
+                dateOfJoin={dateOfJoin}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <LessonList
+                user={user}
+                url={`${baseURI}:${port}`}
+                style={styles.container}
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Container>
     </React.Fragment>
   )
@@ -60,9 +64,7 @@ const ProfilePage = props => {
 
 const styles = {
   container: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto'
+    paddingTop: '20px'
   }
 }
 
