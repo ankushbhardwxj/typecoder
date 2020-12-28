@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react';
 import Typing from 'react-typing-animation';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const Cursor = () => {
   return (
@@ -10,10 +10,10 @@ const Cursor = () => {
       fontSize: '1em',
       paddingLeft: '2px',
     }}>|</span>
-  )
-}
+  );
+};
 
-export const Logo = props => {
+export const Logo = (props) => {
   return (
     <React.Fragment>
       <Typing
@@ -27,10 +27,10 @@ export const Logo = props => {
         <Typing.Backspace count={15} />
       </Typing>
     </React.Fragment>
-  )
-}
+  );
+};
 
-const Header = props => {
+const Header = (props) => {
   return (
     <div>
       <Logo title={props.title} style={styles.header} />
@@ -41,29 +41,29 @@ const Header = props => {
       <h4 style={styles.subheader}>
         For
         <span style={styles.subheader.focus}>
-          {" fast "}
+          {' fast '}
         </span>
         programmers.
       </h4>
     </div>
-  )
-}
+  );
+};
 
 const Features = () => {
   const features = [
     'Improve your coding speed by typing code instead of random stories',
     'Compete with fellow coders to become the fastest',
     'Get detailed reports to identify typos and improve touch typing',
-  ]
+  ];
   return (
     <ul>
       {features.map(
-        (feature, idx) =>
-          (<li key={idx} style={styles.li}>{feature}</li>)
+          (feature, idx) =>
+            (<li key={idx} style={styles.li}>{feature}</li>),
       )}
     </ul>
-  )
-}
+  );
+};
 
 const Footer = () => {
   return (
@@ -71,12 +71,12 @@ const Footer = () => {
       <p style={styles.footer}>
         Made with 🤟 by
         <a target='blank' style={styles.footer.link} href="https://github.com/ankingcodes">
-          {" @ankingcodes"}
+          {' @ankingcodes'}
         </a>
       </p>
     </div>
-  )
-}
+  );
+};
 
 
 const HomePage = () => {
@@ -93,13 +93,13 @@ const HomePage = () => {
       </Link>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
 const title = {
   fontSpeed: 50,
   delay: 0,
-}
+};
 
 const styles = {
   footer: {
@@ -109,28 +109,28 @@ const styles = {
     fontFamily: 'Source Code Pro',
     marginTop: '90px',
     link: {
-      color: '#4bd2d6'
-    }
+      color: '#4bd2d6',
+    },
   },
   button: {
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: '20px'
+    marginTop: '20px',
   },
   image: {
     width: '450px',
     height: '120px',
     display: 'block',
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
   },
   header: {
     fontFamily: 'Source Code Pro',
     fontSize: '90px',
     textAlign: 'center',
     color: '#e8e8e8',
-    textShadow: '2px 2px 2px grey, 2px 2px 2px white'
+    textShadow: '2px 2px 2px grey, 2px 2px 2px white',
   },
   subheader: {
     fontFamily: 'Stalinist One, cursive',
@@ -139,8 +139,8 @@ const styles = {
     textAlign: 'center',
     textShadow: '4px 4px black',
     focus: {
-      color: '#f0a967'
-    }
+      color: '#f0a967',
+    },
   },
   li: {
     fontFamily: 'Acme, sans-serif',
@@ -152,10 +152,10 @@ const styles = {
     marginRight: '30%',
     listStyleType: 'none',
     paddingBottom: '11px',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   container: {
-    paddingTop: '60px'
-  }
-}
+    paddingTop: '60px',
+  },
+};
 export default HomePage;

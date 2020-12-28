@@ -1,16 +1,16 @@
 import React from 'react';
-import { Container, Image, Card } from 'semantic-ui-react';
+import {Container, Image, Card} from 'semantic-ui-react';
 
-const ProfileCard = props => {
+const ProfileCard = (props) => {
   const getJoinDate = (timestamp) => {
     const date = String(timestamp).split('T')[0];
     const dateString = new Date(date).toLocaleDateString('en-GB', {
       day: 'numeric',
       month: 'short',
-      year: 'numeric'
-    })
+      year: 'numeric',
+    });
     return dateString;
-  }
+  };
 
   return (
     <Container style={props.style}>
@@ -29,7 +29,7 @@ const ProfileCard = props => {
         </Card.Content>
       </Card>
     </Container>
-  )
-}
+  );
+};
 
 export default ProfileCard;

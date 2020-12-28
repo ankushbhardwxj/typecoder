@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { Button, Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
+import React, {useState, useEffect} from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faGithub, faGoogle} from '@fortawesome/free-brands-svg-icons';
+import {Button, Card, Container, Divider, Form, Grid} from 'semantic-ui-react';
 import axios from 'axios';
-import { Link, Redirect, BrowserRouter } from 'react-router-dom';
-import { baseURI, port } from '../../config';
+import {Link, Redirect, BrowserRouter} from 'react-router-dom';
+import {baseURI, port} from '../../config';
 
-const SignInWith = props => {
+const SignInWith = (props) => {
   return (
     <div
       style={styles.icon}>
@@ -15,8 +15,8 @@ const SignInWith = props => {
         size='2x'
       />
     </div>
-  )
-}
+  );
+};
 
 const SignInForm = () => {
   const [login, toggleLogin] = useState(true);
@@ -27,15 +27,19 @@ const SignInForm = () => {
   const [password, setPassword] = useState('');
 
   const handleUserInput = (key, value) => {
-    if (key == 'username')
+    if (key == 'username') {
       setUsername(value);
-    if (key == 'password')
+    }
+    if (key == 'password') {
       setPassword(value);
-    if (!login && key == 'fullname')
+    }
+    if (!login && key == 'fullname') {
       setfullname(value);
-    if (!login && key == 'email')
+    }
+    if (!login && key == 'email') {
       setEmail(value);
-  }
+    }
+  };
 
   const handleSubmit = () => {
     axios({
@@ -45,33 +49,33 @@ const SignInForm = () => {
         email: email,
         fullName: fullname,
         username: username,
-        password: password
-      }
+        password: password,
+      },
     })
-      .then(r => console.log('POST METHOD DONE !'))
-      .catch(err => console.log('ERROR !' + err))
-  }
+        .then((r) => console.log('POST METHOD DONE !'))
+        .catch((err) => console.log('ERROR !' + err));
+  };
 
   const handleSignIn = async () => {
-    let axiosRequest = await axios({
+    const axiosRequest = await axios({
       method: 'POST',
       url: `${baseURI}:${port}/user/signin`,
       data: {
         username: username,
-        password: password
-      }
+        password: password,
+      },
     })
-      .then(() => {
-        console.log('POST (Sign in) Done !');
-        toggleSignIn(!signIn);
-      })
-      .catch(err => console.log(err))
-  }
+        .then(() => {
+          console.log('POST (Sign in) Done !');
+          toggleSignIn(!signIn);
+        })
+        .catch((err) => console.log(err));
+  };
 
   if (signIn) {
     return (
       <Redirect to={`/app/users/${username}/profile`} />
-    )
+    );
   }
 
   return (
@@ -96,11 +100,11 @@ const SignInForm = () => {
             </>
           )}
           <Form.Field>
-            <input onChange={e => handleUserInput('username', e.target.value)}
+            <input onChange={(e) => handleUserInput('username', e.target.value)}
               id='Username' placeholder='Username' />
           </Form.Field>
           <Form.Field>
-            <input onChange={e => handleUserInput('password', e.target.value)}
+            <input onChange={(e) => handleUserInput('password', e.target.value)}
               id='Password' type='password' placeholder='Password' />
           </Form.Field>
           {!login ? (
@@ -123,48 +127,48 @@ const SignInForm = () => {
       <Card.Content extra>
         {
           login ? (
-            <p style={{ color: 'black' }}>
+            <p style={{color: 'black'}}>
               Don't have an account ?
               <span
                 style={styles.link}
-                onClick={() => toggleLogin(false)}>{" Sign up"}</span>
+                onClick={() => toggleLogin(false)}>{' Sign up'}</span>
             </p>
           ) : (
-              <p style={{ color: 'black' }}>
+              <p style={{color: 'black'}}>
                 Have an account ?
                 <span
                   style={styles.link}
-                  onClick={() => toggleLogin(true)}>{" Log in"}</span>
+                  onClick={() => toggleLogin(true)}>{' Log in'}</span>
               </p>
             )
         }
         <a
-          style={{ color: '#1f6f8b', cursor: 'pointer', fontSize: '12px' }}>
+          style={{color: '#1f6f8b', cursor: 'pointer', fontSize: '12px'}}>
           Forgot password ?
         </a>
       </Card.Content>
     </Card>
-  )
-}
+  );
+};
 
 const Login = () => {
   return (
-    <Container textAlign="center" style={{ paddingTop: '60px' }}>
+    <Container textAlign="center" style={{paddingTop: '60px'}}>
       <SignInForm />
     </Container>
-  )
-}
+  );
+};
 
 const styles = {
-  link: { color: '#1f6f8b', cursor: 'pointer' },
+  link: {color: '#1f6f8b', cursor: 'pointer'},
   icon: {
     color: 'black',
     paddingLeft: '20px',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   icons: {
     marginLeft: '30%',
-    marginRight: 'auto'
+    marginRight: 'auto',
   },
   header: {
     fontFamily: 'Goldman, cursive',
@@ -172,17 +176,17 @@ const styles = {
     fontSize: '35px',
     paddingBottom: '15px',
     paddingTop: '10px',
-    textShadow: '2px 2px black'
+    textShadow: '2px 2px black',
   },
   subHeader: {
     color: '#222831',
     fontFamily: 'Goldman, cursive',
-    fontSize: '20px'
+    fontSize: '20px',
   },
   subAuth: {
     color: '#222831',
     fontFamily: 'Goldman, cursive',
-    fontSize: '15px'
+    fontSize: '15px',
   },
   container: {
     display: 'block',
@@ -192,7 +196,7 @@ const styles = {
   },
   cardLogin: {
     fontFamily: 'Constantine',
-    color: 'black'
-  }
-}
+    color: 'black',
+  },
+};
 export default Login;

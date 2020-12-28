@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import NavBar from './NavBar';
 import axios from 'axios';
-import { baseURI, port } from '../../config';
+import {baseURI, port} from '../../config';
 import ProfileCard from './ProfileCard';
 import LessonList from './LessonList';
-import { Grid, Container } from 'semantic-ui-react';
+import {Grid, Container} from 'semantic-ui-react';
 
-const ProfilePage = props => {
-  let { user } = useParams();
-  let [firstRender, toggleFirstRender] = useState(false);
-  let [username, setUsername] = useState('');
-  let [email, setEmail] = useState('');
-  let [fullName, setFullName] = useState('');
-  let [dateOfJoin, setDateOfJoin] = useState('');
+const ProfilePage = (props) => {
+  const {user} = useParams();
+  const [firstRender, toggleFirstRender] = useState(false);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [dateOfJoin, setDateOfJoin] = useState('');
 
   useEffect(() => {
     // TODO: fix multiple render issue here
@@ -21,17 +21,17 @@ const ProfilePage = props => {
       method: 'GET',
       url: `${baseURI}:${port}/users/${user}/info`,
     })
-      .then(res => res.data)
-      .then(res => res[res.length - 1])
-      .then(res => {
-        let { date, email, fullName, username } = res;
-        setUsername(username);
-        setEmail(email);
-        setDateOfJoin(date);
-        setFullName(fullName);
-      })
-      .catch(e => console.log(e));
-  }, [firstRender])
+        .then((res) => res.data)
+        .then((res) => res[res.length - 1])
+        .then((res) => {
+          const {date, email, fullName, username} = res;
+          setUsername(username);
+          setEmail(email);
+          setDateOfJoin(date);
+          setFullName(fullName);
+        })
+        .catch((e) => console.log(e));
+  }, [firstRender]);
 
   return (
     <React.Fragment>
@@ -59,13 +59,13 @@ const ProfilePage = props => {
         </Grid>
       </Container>
     </React.Fragment>
-  )
-}
+  );
+};
 
 const styles = {
   container: {
-    paddingTop: '20px'
-  }
-}
+    paddingTop: '20px',
+  },
+};
 
 export default ProfilePage;
