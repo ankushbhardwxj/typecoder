@@ -1,21 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import data from '../../code';
 import './editor.css';
-import {findDOMNode} from 'react-dom';
-import {Container} from 'semantic-ui-react';
-
+import Cursor from './cursor';
+import Header from './header';
+import GameOverComponent from './gameOver';
 
 // TODO: Improve this cursor to be like that of Google DOCS
 // also this needs a popping animation resembling to VIM
-const Cursor = (props) => {
-  return (
-    <span
-      className={props.class}
-      id={props.activeKey}>
-      {props.children}
-    </span>
-  );
-};
 
 class Editor extends React.Component {
   constructor(props) {
@@ -45,7 +36,7 @@ class Editor extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
     this.codeRef.current.addEventListener('click', this.handleClick);
-    this.setState({code: data, size: [...data].length - 1});
+    this.setState({ code: data, size: [...data].length - 1 });
   }
 
   handleClick(evt) {
@@ -54,7 +45,7 @@ class Editor extends React.Component {
   }
 
   handleKeyDown(e) {
-    let activeKey; let ele;
+    let activeKey, ele;
     if (!this.state.gameOver) {
       activeKey = e.key;
       ele = document.getElementById(this.state.idx).innerText;
@@ -72,7 +63,7 @@ class Editor extends React.Component {
     }
     // GAME OVER: When cursor reaches last character
     if (this.state.idx >= this.state.size - 1) {
-      this.setState({gameOver: true});
+      this.setState({ gameOver: true });
     }
 
     if (!this.state.gameOver) {
@@ -127,13 +118,13 @@ class Editor extends React.Component {
 
   handlePauseClick() {
     if (this.state.pause) {
-      this.setState({pause: !this.state.pause});
+      this.setState({ pause: !this.state.pause });
     }
   }
 
   handleUnpauseClick() {
     if (!this.state.pause) {
-      this.setState({pause: !this.state.pause});
+      this.setState({ pause: !this.state.pause });
     }
   }
 
@@ -142,7 +133,7 @@ class Editor extends React.Component {
       <div
         className="code-container"
         onClick={this.handleUnpauseClick}
-        style={{background: 'gray'}}
+        style={{ background: 'gray' }}
       >
         <Header
           totalTyped={this.state.totalTyped}
@@ -151,8 +142,10 @@ class Editor extends React.Component {
         {!this.state.gameOver &&
           <pre
             onClick={this.handlePauseClick}
-            style={{background: '#2e2d2c', color: 'white',
-              fontWeight: 'bold', paddingLeft: '20px'}}>
+            style={{
+              background: '#2e2d2c', color: 'white',
+              fontWeight: 'bold', paddingLeft: '20px'
+            }}>
             <code
               ref={this.codeRef}
               className={'python'}
@@ -203,23 +196,6 @@ class Editor extends React.Component {
     );
   }
 }
-
-const GameOverComponent = () => (
-  <div style={{background: 'white', fontWeight: 'bold'}}>
-    <h3>GAME OVER</h3>
-    <img alt="Naruto" src="https://i.ytimg.com/vi/XdBrFPqSMpo/hqdefault.jpg" />
-  </div>
-);
-
-const Header = (props) => {
-  return (
-    <>
-      <h1 style={{paddingLeft: '20px'}}>Total Typed: {props.totalTyped}</h1>
-      {props.pause && <div style={{paddingLeft: '20px'}}>Paused</div>}
-      {!props.pause && <div style={{paddingLeft: '20px'}}>Typing</div>}
-    </>
-  );
-};
 
 export default Editor;
 

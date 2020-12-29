@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import NavBar from './NavBar';
 import axios from 'axios';
-import {baseURI, port} from '../../config';
+import { baseURI, port } from '../../config';
 import ProfileCard from './ProfileCard';
 import LessonList from './LessonList';
-import {Grid, Container} from 'semantic-ui-react';
+import { Grid, Container } from 'semantic-ui-react';
 
 const ProfilePage = (props) => {
-  const {user} = useParams();
+  const { user } = useParams();
   const [firstRender, toggleFirstRender] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -21,16 +21,16 @@ const ProfilePage = (props) => {
       method: 'GET',
       url: `${baseURI}:${port}/users/${user}/info`,
     })
-        .then((res) => res.data)
-        .then((res) => res[res.length - 1])
-        .then((res) => {
-          const {date, email, fullName, username} = res;
-          setUsername(username);
-          setEmail(email);
-          setDateOfJoin(date);
-          setFullName(fullName);
-        })
-        .catch((e) => console.log(e));
+      .then((res) => res.data)
+      .then((res) => res[res.length - 1])
+      .then((res) => {
+        const { date, email, fullName, username } = res;
+        setUsername(username);
+        setEmail(email);
+        setDateOfJoin(date);
+        setFullName(fullName);
+      })
+      .catch((e) => console.log(e));
   }, [firstRender]);
 
   return (
@@ -50,9 +50,10 @@ const ProfilePage = (props) => {
             </Grid.Column>
             <Grid.Column>
               <LessonList
-                user={user}
                 url={`${baseURI}:${port}`}
                 style={styles.container}
+                username={username}
+                user={user}
               />
             </Grid.Column>
           </Grid.Row>

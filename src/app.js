@@ -17,7 +17,7 @@ const routes = [
     main: () => <ProfilePage />
   },
   {
-    path: '/app/code',
+    path: '/app/users/:user/lesson/:lessonTitle',
     exact: true,
     main: () => <Editor />
   },
@@ -27,7 +27,6 @@ const routes = [
   },
   {
     path: '/app',
-    exact: true,
     main: () => <HomePage />,
   },
   {

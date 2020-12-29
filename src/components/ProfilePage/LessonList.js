@@ -1,17 +1,20 @@
 import axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import {Item, Button, Container, Header, Card} from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { Item, Button, Container, Header, Card } from 'semantic-ui-react';
 
 const LessonItem = (props) => {
   return (
     <Card>
       <Item.Content>
-        <Card.Header style={{fontFamily: 'Source Code Pro'}}>
+        <Card.Header style={{ fontFamily: 'Source Code Pro' }}>
           {props.header}
         </Card.Header>
         <Card.Content description={props.description}></Card.Content>
       </Item.Content>
-      <Button floated='right'>Code !</Button>
+      <Link to={`/app/users/${props.user}/lesson/${props.header}`}>
+        <Button floated='right' >Code !</Button>
+      </Link>
     </Card>
   );
 };
@@ -26,10 +29,10 @@ const LessonList = (props) => {
       method: 'GET',
       url: uri,
     }).then((res) => res.data)
-        .then((res) => {
-          updateLessons(res);
-        })
-        .catch((err) => console.log(err));
+      .then((res) => {
+        updateLessons(res);
+      })
+      .catch((err) => console.log(err));
   }, [firstRender]);
 
   return (
@@ -37,14 +40,16 @@ const LessonList = (props) => {
       <Container style={props.style}>
         <Header
           as='h2'
-          style={{fontFamily: 'Source Code Pro'}}
+          style={{ fontFamily: 'Source Code Pro' }}
           inverted
           color='red'>
           Lessons
         </Header>
         <Card.Group>
-          {lessons.map((lesson) =>
+          {lessons.map((lesson, idx) =>
             <LessonItem
+              key={idx}
+              user={props.user}
               header={lesson.title}
               description={`Great coding tutorial for Greatest Coders`}
             />,
