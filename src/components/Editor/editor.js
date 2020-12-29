@@ -4,6 +4,9 @@ import './editor.css';
 import Cursor from './cursor';
 import Header from './header';
 import GameOverComponent from './gameOver';
+import { withRouter } from 'react-router';
+import axios from 'axios';
+import { baseURI, port } from '../../config'
 
 // TODO: Improve this cursor to be like that of Google DOCS
 // also this needs a popping animation resembling to VIM
@@ -36,7 +39,22 @@ class Editor extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
     this.codeRef.current.addEventListener('click', this.handleClick);
-    this.setState({ code: data, size: [...data].length - 1 });
+    const id = this.props.match.params.lessonTitle;
+    const user = this.props.match.params.user
+    axios({
+      method: 'GET',
+      url: `${baseURI}:${port}/users/${user}/lesson/${id}`
+    })
+      .then(res => res.data)
+      .then(res => {
+        console.log(res.code)
+        this.setState({
+          code: res.code,
+          size: [...res.code].length
+        })
+      })
+      .catch(err => console.log(err))
+    //this.setState({ code: data, size: [...data].length - 1 });
   }
 
   handleClick(evt) {
@@ -197,5 +215,5 @@ class Editor extends React.Component {
   }
 }
 
-export default Editor;
+export default withRouter(Editor);
 

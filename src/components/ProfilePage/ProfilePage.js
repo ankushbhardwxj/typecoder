@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useRouteMatch } from 'react-router-dom';
 import NavBar from './NavBar';
 import axios from 'axios';
 import { baseURI, port } from '../../config';
-import ProfileCard from './ProfileCard';
-import LessonList from './LessonList';
-import { Grid, Container } from 'semantic-ui-react';
+import Profile from './MainProfilePage';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom';
+import { Container } from 'semantic-ui-react';
+import Editor from '../Editor/editor';
 
-const ProfilePage = (props) => {
+const ProfilePage = props => {
   const { user } = useParams();
+  const { url } = useRouteMatch();
   const [firstRender, toggleFirstRender] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -36,37 +43,27 @@ const ProfilePage = (props) => {
   return (
     <React.Fragment>
       <NavBar />
-      <Container>
-        <Grid columns={2} divided>
-          <Grid.Row>
-            <Grid.Column>
-              <ProfileCard
-                style={styles.container}
-                profilePic='https://avatars0.githubusercontent.com/u/40923324?s=460&u=ec2ab2c495c1f5ea6b3c9ba1a3717a351236c92e&v=4'
+      <Router>
+        <Container fluid>
+          <Switch>
+            <Route exact path={`${url}/profile`}>
+              <Profile
+                userParam={user}
                 fullName={fullName}
                 username={username}
+                email={email}
                 dateOfJoin={dateOfJoin}
               />
-            </Grid.Column>
-            <Grid.Column>
-              <LessonList
-                url={`${baseURI}:${port}`}
-                style={styles.container}
-                username={username}
-                user={user}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+            </Route>
+            <Route exact path={`${url}/lesson/:lessonTitle`}>
+              <Editor />
+            </Route>
+          </Switch>
+        </Container>
+      </Router>
     </React.Fragment>
   );
 };
 
-const styles = {
-  container: {
-    paddingTop: '20px',
-  },
-};
 
 export default ProfilePage;

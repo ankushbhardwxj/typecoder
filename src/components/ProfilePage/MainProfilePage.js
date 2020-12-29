@@ -1,0 +1,43 @@
+import React from 'react';
+import { baseURI, port } from '../../config';
+import ProfileCard from './ProfileCard';
+import LessonList from './LessonList';
+import { Grid, Container } from 'semantic-ui-react';
+
+
+const Profile = props => {
+  return (
+    <Container>
+      <Grid columns={2} divided>
+        <Grid.Row>
+          <Grid.Column>
+            <ProfileCard
+              style={styles.container}
+              profilePic='https://avatars0.githubusercontent.com/u/40923324?s=460&u=ec2ab2c495c1f5ea6b3c9ba1a3717a351236c92e&v=4'
+              fullName={props.fullName}
+              username={props.username}
+              dateOfJoin={props.dateOfJoin}
+            />
+          </Grid.Column>
+          <Grid.Column>
+            <LessonList
+              url={`${baseURI}:${port}`}
+              style={styles.container}
+              username={props.username}
+              user={props.userParam}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Container>
+  )
+}
+
+
+const styles = {
+  container: {
+    paddingTop: '20px',
+  },
+};
+
+export default Profile;

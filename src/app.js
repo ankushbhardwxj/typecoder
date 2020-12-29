@@ -13,13 +13,8 @@ import ProfilePage from './components/ProfilePage/ProfilePage';
 
 const routes = [
   {
-    path: '/app/users/:user/profile',
+    path: '/app/users/:user/',
     main: () => <ProfilePage />
-  },
-  {
-    path: '/app/users/:user/lesson/:lessonTitle',
-    exact: true,
-    main: () => <Editor />
   },
   {
     path: '/app/login',

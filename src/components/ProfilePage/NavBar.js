@@ -1,13 +1,12 @@
 import React from 'react';
-import {Menu} from 'semantic-ui-react';
-import {Logo} from '../Homepage/homepage';
+import { Menu } from 'semantic-ui-react';
 
 const NavBar = (props) => {
   return (
     <React.Fragment>
       <Menu style={styles.navbar}>
         <Menu.Item>
-          <Logo title="TypeCode" style={styles.logo} />
+          <h3 style={styles.logo}> TypeCode ☕ </h3>
         </Menu.Item>
       </Menu>
     </React.Fragment>

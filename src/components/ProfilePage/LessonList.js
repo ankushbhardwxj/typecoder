@@ -12,7 +12,7 @@ const LessonItem = (props) => {
         </Card.Header>
         <Card.Content description={props.description}></Card.Content>
       </Item.Content>
-      <Link to={`/app/users/${props.user}/lesson/${props.header}`}>
+      <Link to={`/app/users/${props.user}/lesson/${props.id}`}>
         <Button floated='right' >Code !</Button>
       </Link>
     </Card>
@@ -51,8 +51,9 @@ const LessonList = (props) => {
               key={idx}
               user={props.user}
               header={lesson.title}
+              id={lesson._id}
               description={`Great coding tutorial for Greatest Coders`}
-            />,
+            />
           )}
         </Card.Group>
       </Container>

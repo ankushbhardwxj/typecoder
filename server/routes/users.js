@@ -52,7 +52,7 @@ router.post('/:user/lesson/create-lesson', async (req, res) => {
 // get a specific lesson of an user by name
 router.get('/:user/lesson/:lessonTitle', async (req, res) => {
   try {
-    const getLesson = await Lesson.find({ title: req.params.lessonTitle });
+    const getLesson = await Lesson.findOne({ _id: req.params.lessonTitle });
     res.status(201).json(getLesson);
   } catch (err) {
     console.log(err.message());
