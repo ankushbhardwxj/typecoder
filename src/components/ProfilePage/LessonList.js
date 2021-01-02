@@ -1,27 +1,14 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Item, Button, Container, Header, Card } from 'semantic-ui-react';
-
-const LessonItem = (props) => {
-  return (
-    <Card>
-      <Item.Content>
-        <Card.Header style={{ fontFamily: 'Source Code Pro' }}>
-          {props.header}
-        </Card.Header>
-        <Card.Content description={props.description}></Card.Content>
-      </Item.Content>
-      <Link to={`/app/users/${props.user}/lesson/${props.id}`}>
-        <Button floated='right' >Code !</Button>
-      </Link>
-    </Card>
-  );
-};
+import { Item, Dropdown, Button, Container, Header, Card, Modal } from 'semantic-ui-react';
+import LessonModalForm from './LessonModalForm';
+import { Alert } from 'reactstrap';
+import LessonItem from './LessonItem';
 
 const LessonList = (props) => {
-  const [firstRender, toggleFirstRender] = useState(false);
   const [lessons, updateLessons] = useState([]);
+  const [lessonCount, updateCount] = useState(0);
 
   useEffect(() => {
     const uri = `${props.url}/users/${props.user}/lessons`;
@@ -31,9 +18,18 @@ const LessonList = (props) => {
     }).then((res) => res.data)
       .then((res) => {
         updateLessons(res);
+        updateCount(res.length)
       })
       .catch((err) => console.log(err));
-  }, [firstRender]);
+  }, [lessonCount]);
+
+  const onLessonDelete = () => {
+    updateCount(lessonCount - 1);
+  }
+
+  const onLessonAddition = () => {
+    updateCount(lessonCount + 1);
+  }
 
   return (
     <React.Fragment>
@@ -45,6 +41,10 @@ const LessonList = (props) => {
           color='red'>
           Lessons
         </Header>
+        <LessonModalForm
+          user={props.user}
+          onAdd={onLessonAddition}
+        />
         <Card.Group>
           {lessons.map((lesson, idx) =>
             <LessonItem
@@ -52,7 +52,9 @@ const LessonList = (props) => {
               user={props.user}
               header={lesson.title}
               id={lesson._id}
-              description={`Great coding tutorial for Greatest Coders`}
+              description={lesson.description}
+              date={lesson.date}
+              onDelete={onLessonDelete}
             />
           )}
         </Card.Group>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import data from '../../code';
 import './editor.css';
 import Cursor from './cursor';
 import Header from './header';
@@ -17,6 +16,7 @@ class Editor extends React.Component {
     this.state = {
       idx: 0,
       code: '',
+      title: '',
       pause: false,
       delete: false,
       totalTyped: 0,
@@ -47,14 +47,14 @@ class Editor extends React.Component {
     })
       .then(res => res.data)
       .then(res => {
-        console.log(res.code)
+        console.log(res)
         this.setState({
           code: res.code,
-          size: [...res.code].length
+          size: [...res.code].length,
+          title: res.title
         })
       })
       .catch(err => console.log(err))
-    //this.setState({ code: data, size: [...data].length - 1 });
   }
 
   handleClick(evt) {
@@ -64,15 +64,17 @@ class Editor extends React.Component {
 
   handleKeyDown(e) {
     let activeKey, ele;
-    if (!this.state.gameOver) {
+    if (!this.state.gameOver && this.state.idx != null) {
       activeKey = e.key;
-      ele = document.getElementById(this.state.idx).innerText;
+      const element = document.getElementById(this.state.idx);
+      if (element != null)
+        ele = element.innerText;
     }
     // Keep focus on document after hitting tab, extra +1 for cursor to move 2 step
     if (e.keyCode == 9 && e.shiftKey == false) {
       e.preventDefault();
-      const tabbedChr = document.getElementById(this.state.idx).innerText;
-      const tabbedChrCode = tabbedChr.charCodeAt(tabbedChr.length - 1);
+      const tabbedChr = document.getElementById(this.state.idx)?.innerText;
+      const tabbedChrCode = tabbedChr?.charCodeAt(tabbedChr.length - 1);
       if (tabbedChrCode == 32) {
         this.setState({
           idx: this.state.idx + 2,
@@ -80,7 +82,7 @@ class Editor extends React.Component {
       }
     }
     // GAME OVER: When cursor reaches last character
-    if (this.state.idx >= this.state.size - 1) {
+    if (this.state.idx >= this.state.size - 1 && !this.state.incorrect) {
       this.setState({ gameOver: true });
     }
 
@@ -151,11 +153,11 @@ class Editor extends React.Component {
       <div
         className="code-container"
         onClick={this.handleUnpauseClick}
-        style={{ background: 'gray' }}
       >
         <Header
           totalTyped={this.state.totalTyped}
           pause={this.props.pause}
+          title={this.state.title}
         />
         {!this.state.gameOver &&
           <pre

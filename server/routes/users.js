@@ -36,6 +36,7 @@ router.post('/:user/lesson/create-lesson', async (req, res) => {
     const lesson = new Lesson({
       _id: new mongoose.Types.ObjectId(),
       title: req.body.title,
+      description: req.body.description,
       code: req.body.code,
     });
     await lesson.save();
@@ -57,8 +58,20 @@ router.get('/:user/lesson/:lessonTitle', async (req, res) => {
   } catch (err) {
     console.log(err.message());
     res.status(500).json({ error: err });
-
   }
 })
 
+// delete a specific lesson of an user by name
+router.delete('/:user/lesson/:lessonId', async (req, res) => {
+  try {
+    let deleteLesson = await Lesson.findOneAndDelete({ _id: req.params.lessonId });
+    console.log(deleteLesson)
+    res.status(201).json({
+      message: 'deleted successfully'
+    })
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ error: err })
+  }
+})
 module.exports = router;

@@ -16,7 +16,6 @@ import Editor from '../Editor/editor';
 const ProfilePage = props => {
   const { user } = useParams();
   const { url } = useRouteMatch();
-  const [firstRender, toggleFirstRender] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
@@ -38,7 +37,7 @@ const ProfilePage = props => {
         setFullName(fullName);
       })
       .catch((e) => console.log(e));
-  }, [firstRender]);
+  }, []);
 
   return (
     <React.Fragment>
