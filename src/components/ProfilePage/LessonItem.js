@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Item, Dropdown, Button, Card, Divider, Segment, Grid, Header } from 'semantic-ui-react';
+import { Item, Dropdown, Button, Card, Divider, Segment, Grid, Header, Label } from 'semantic-ui-react';
 import axios from 'axios';
 import { baseURI, port } from '../../config';
 
 const LessonItem = (props) => {
+  const [cantDeleteNotification, toggleCantDelete] = useState(false);
+
   const getPostDate = (timestamp) => {
     const date = String(timestamp).split('T')[0];
     const dateString = new Date(date).toLocaleDateString('en-GB', {
@@ -17,18 +19,56 @@ const LessonItem = (props) => {
 
   const handleDelete = e => {
     // Delete that particular lesson
-    axios.delete(`${baseURI}:${port}/users/${props.user}/lesson/${props.id}`)
-      .then(r => {
-        console.log(`Successfully deleted ! ${r}`);
-        props.onDelete();
-      })
-      .catch(err => console.log(err))
+    console.log(props.user, props.originalUserName)
+    if (props.user === props.originUserName || props.originUserName == undefined) {
+      axios.delete(`${baseURI}:${port}/users/${props.user}/lesson/${props.id}`)
+        .then(r => {
+          console.log(`Successfully deleted ! ${r}`);
+          props.onDelete();
+        })
+        .catch(err => console.log(err))
+    }
   }
 
   const handleEdit = e => {
     // Edit code of the lesson
     console.log(props.header, props.description, props.code)
   }
+
+  const getColor = () => {
+    var color = ''
+    switch (props.language) {
+      case 'Python':
+        color = 'teal'
+        break
+      case 'Chapel':
+        color = 'teal'
+        break
+      case 'C/C++':
+        color = 'red'
+        break
+      case 'Java':
+        color = 'brown'
+        break
+      case 'Javascript':
+        color = 'green'
+        break
+      default:
+        color = 'black'
+        break
+    }
+    return color
+  }
+
+  useState(() => {
+    if (props.originUserName == undefined) toggleCantDelete(false);
+    else if (props.user !== props.originUserName) {
+      toggleCantDelete(true);
+    } else {
+      toggleCantDelete(false);
+    }
+  }, [])
+
   if (!props.noLesson)
     return (
       <Card fluid>
@@ -40,7 +80,12 @@ const LessonItem = (props) => {
                   {props.header}
                 </Card.Header>
                 <Card.Meta>Posted on {getPostDate(props.date)}</Card.Meta>
-                <Card.Content description={props.description}></Card.Content>
+                <Card.Content>
+                  {props.description}
+                  <Label tag color={getColor()} attached='bottom right'>
+                    {props.language}
+                  </Label>
+                </Card.Content>
               </Item.Content>
             </Card>
           </Grid.Column>
@@ -51,12 +96,13 @@ const LessonItem = (props) => {
                   <p style={{ color: 'white' }}>Code !</p>
                 </Button>
               </Link>
-              <Dropdown className='button icon'>
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={handleDelete} text='Delete Lesson' icon='trash' />
-                  <Dropdown.Item onClick={handleEdit} text='Edit Lesson' icon='edit' />
-                </Dropdown.Menu>
-              </Dropdown>
+              {!cantDeleteNotification &&
+                <Dropdown className='button icon'>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={handleDelete} text='Delete Lesson' icon='trash' />
+                    <Dropdown.Item onClick={handleEdit} text='Edit Lesson' icon='edit' />
+                  </Dropdown.Menu>
+                </Dropdown>}
             </Button.Group>
           </Grid.Column>
         </Grid>

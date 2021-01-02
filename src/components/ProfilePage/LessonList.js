@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Item, Dropdown, Button, Container, Header, Card, Modal, Segment, Divider } from 'semantic-ui-react';
 import LessonModalForm from './LessonModalForm';
-import { Alert } from 'reactstrap';
 import LessonItem from './LessonItem';
 
 const EmptyListFallback = props => {
@@ -27,12 +26,13 @@ const EmptyListFallback = props => {
       <LessonItem noLesson />
       {lessons.map((lesson, idx) =>
         <LessonItem
-          noOptionsButton
           key={idx}
-          user={username}
+          user={props.user}
+          originUserName={username}
           header={lesson.title}
           id={lesson._id}
           description={lesson.description}
+          language={lesson.language}
           date={lesson.date}
           code={lesson.code}
         />
@@ -81,7 +81,11 @@ const LessonList = (props) => {
           onAdd={onLessonAddition}
         />
         <Card.Group style={styles.card}>
-          {lessonCount == 0 && <EmptyListFallback url={props.url} />}
+          {lessonCount == 0 &&
+            <EmptyListFallback
+              user={props.user}
+              url={props.url}
+            />}
           {lessonCount > 0 && lessons.map((lesson, idx) =>
             <LessonItem
               key={idx}
@@ -89,6 +93,7 @@ const LessonList = (props) => {
               header={lesson.title}
               id={lesson._id}
               description={lesson.description}
+              language={lesson.language}
               date={lesson.date}
               code={lesson.code}
               onDelete={onLessonDelete}

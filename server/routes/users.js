@@ -38,6 +38,8 @@ router.post('/:user/lesson/create-lesson', async (req, res) => {
       title: req.body.title,
       description: req.body.description,
       code: req.body.code,
+      author: req.body.author,
+      language: req.body.language,
     });
     await lesson.save();
     const user = User.updateOne({ username: req.params.user },

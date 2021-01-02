@@ -47,7 +47,6 @@ class Editor extends React.Component {
     })
       .then(res => res.data)
       .then(res => {
-        console.log(res)
         this.setState({
           code: res.code,
           size: [...res.code].length,

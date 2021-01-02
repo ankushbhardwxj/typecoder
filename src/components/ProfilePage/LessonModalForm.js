@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, Header, Form, Dropdown } from 'semantic-ui-react';
+import { Button, Modal, Header, Form, Dropdown, Label } from 'semantic-ui-react';
 import axios from 'axios';
 import { baseURI, port } from '../../config';
 
@@ -11,6 +11,7 @@ const LessonModalForm = props => {
   const [codeContent, setCodeContent] = useState('');
 
   const handleClick = () => {
+    console.log(fileName, description, codeContent, props.user, language);
     axios({
       method: 'POST',
       url: `${baseURI}:${port}/users/${props.user}/lesson/create-lesson`,
@@ -29,12 +30,14 @@ const LessonModalForm = props => {
       .catch(err => console.log(err))
   }
   const languageOptions = [
-    { text: 'Python', value: 'python' },
-    { text: 'C/C++', value: 'c' },
-    { text: 'Java', value: 'java' },
-    { text: 'Javascript', value: 'js' },
-    { text: 'TypeScript', value: 'ts' },
-
+    { text: 'Python', value: 'Python' },
+    { text: 'C/C++', value: 'C/C++' },
+    { text: 'Java', value: 'Java' },
+    { text: 'Javascript', value: 'Javascript' },
+    { text: 'TypeScript', value: 'TypeScript' },
+    { text: 'Chapel', value: 'Chapel' },
+    { text: 'Julia', value: 'Julia' },
+    { text: 'Go', value: 'Go' }
   ];
 
   return (
@@ -66,9 +69,10 @@ const LessonModalForm = props => {
               label='Code'
               onChange={e => setCodeContent(e.target.value)}
               placeholder='Copy & Paste some code here' />
-            <Dropdown
+            <Form.Dropdown
+              label='Language'
               placeholder='Select Language'
-              onChange={e => setLanguage(e.target.value)}
+              onChange={e => setLanguage(e.target.innerText)}
               search selection
               options={languageOptions}
             />

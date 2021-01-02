@@ -59,8 +59,8 @@ const SignInForm = () => {
       .catch((err) => console.log('ERROR !' + err));
   };
 
-  const handleSignIn = async () => {
-    const axiosRequest = await axios({
+  const handleSignIn = () => {
+    axios({
       method: 'POST',
       url: `${baseURI}:${port}/user/signin`,
       data: {
