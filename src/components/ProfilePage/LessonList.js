@@ -109,7 +109,7 @@ const styles = {
   header: {
     fontFamily: 'Stalinist One, cursive',
     fontSize: '30px',
-    textShadow: '4px 4px gray',
+    textShadow: '4px 4px #606166',
     WebkitTextStrokeWidth: '0.1px',
     WebkitTextStrokeColor: 'black'
   },

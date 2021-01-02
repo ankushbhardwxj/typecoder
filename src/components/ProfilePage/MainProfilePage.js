@@ -3,6 +3,7 @@ import { baseURI, port } from '../../config';
 import ProfileCard from './ProfileCard';
 import LessonList from './LessonList';
 import { Grid, Container } from 'semantic-ui-react';
+import RecentActivity from './RecentActivity';
 
 
 const Profile = props => {
@@ -11,13 +12,19 @@ const Profile = props => {
       <Grid columns={2} divided>
         <Grid.Row>
           <Grid.Column>
-            <ProfileCard
-              style={styles.container}
-              profilePic='https://avatars0.githubusercontent.com/u/40923324?s=460&u=ec2ab2c495c1f5ea6b3c9ba1a3717a351236c92e&v=4'
-              fullName={props.fullName}
-              username={props.username}
-              dateOfJoin={props.dateOfJoin}
-            />
+            <Grid.Row>
+              <ProfileCard
+                style={styles.container}
+                profilePic='https://avatars0.githubusercontent.com/u/40923324?s=460&u=ec2ab2c495c1f5ea6b3c9ba1a3717a351236c92e&v=4'
+                fullName={props.fullName}
+                username={props.username}
+                dateOfJoin={props.dateOfJoin}
+                email={props.email}
+              />
+            </Grid.Row>
+            <Grid.Row>
+              <RecentActivity />
+            </Grid.Row>
           </Grid.Column>
           <Grid.Column>
             <LessonList

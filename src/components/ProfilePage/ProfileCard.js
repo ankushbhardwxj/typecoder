@@ -1,5 +1,7 @@
 import React from 'react';
-import {Container, Image, Card} from 'semantic-ui-react';
+import style from 'react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark';
+import { Container, Image, Card } from 'semantic-ui-react';
+import Social from './Social';
 
 const ProfileCard = (props) => {
   const getJoinDate = (timestamp) => {
@@ -19,17 +21,34 @@ const ProfileCard = (props) => {
           size='small' wrapped ui={false}
           onMouseOver={() => { }} />
         <Card.Content>
-          <Card.Header>{props.fullName}</Card.Header>
+          <Card.Header style={styles.name} >{props.fullName}</Card.Header>
           <Card.Meta>
-            <span className='username'><b>{props.username}</b></span>
+            <span style={styles.username} className='username'><b>{props.username}</b></span>
           </Card.Meta>
           <Card.Meta>
-            <span className='date'>Joined in {getJoinDate(props.dateOfJoin)}</span>
+            <span className='date'>
+              <em>
+                Joined on {getJoinDate(props.dateOfJoin)}
+              </em>
+            </span>
           </Card.Meta>
+        </Card.Content>
+        <Card.Content extra>
+          <Social email={props.email} />
         </Card.Content>
       </Card>
     </Container>
   );
 };
 
+const styles = {
+  name: {
+    fontFamily: 'Source Code Pro',
+    color: '#2d3e8a'
+  },
+  username: {
+    fontFamily: 'Constantia',
+    color: 'black'
+  }
+}
 export default ProfileCard;
