@@ -16,13 +16,13 @@ const Header = (props) => {
 const styles = {
   title: {
     fontFamily: 'Goldman, cursive',
-    fontsize: '20px',
+    fontSize: '38px',
     color: '#f05459',
     textShadow: '2px 2px black',
   },
   totalTyped: {
     fontFamily: 'Goldman, cursive',
-    fontsize: '10px',
+    fontSize: '20px',
     marginTop: '-10px'
   }
 }

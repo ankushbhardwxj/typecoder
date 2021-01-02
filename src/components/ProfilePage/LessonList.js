@@ -1,10 +1,45 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Item, Dropdown, Button, Container, Header, Card, Modal } from 'semantic-ui-react';
+import { Item, Dropdown, Button, Container, Header, Card, Modal, Segment, Divider } from 'semantic-ui-react';
 import LessonModalForm from './LessonModalForm';
 import { Alert } from 'reactstrap';
 import LessonItem from './LessonItem';
+
+const EmptyListFallback = props => {
+  const username = 'ankingcodes';
+  const [lessons, updateLessons] = useState([]);
+
+  useEffect(() => {
+    const uri = `${props.url}/users/${username}/lessons`;
+    axios({
+      method: 'GET',
+      url: uri,
+    }).then((res) => res.data)
+      .then((res) => {
+        updateLessons(res);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  return (
+    <>
+      <LessonItem noLesson />
+      {lessons.map((lesson, idx) =>
+        <LessonItem
+          noOptionsButton
+          key={idx}
+          user={username}
+          header={lesson.title}
+          id={lesson._id}
+          description={lesson.description}
+          date={lesson.date}
+          code={lesson.code}
+        />
+      )}
+    </>
+  )
+}
 
 const LessonList = (props) => {
   const [lessons, updateLessons] = useState([]);
@@ -36,7 +71,7 @@ const LessonList = (props) => {
       <Container style={props.style}>
         <Header
           as='h2'
-          style={{ fontFamily: 'Source Code Pro' }}
+          style={styles.header}
           inverted
           color='red'>
           Lessons
@@ -45,8 +80,9 @@ const LessonList = (props) => {
           user={props.user}
           onAdd={onLessonAddition}
         />
-        <Card.Group>
-          {lessons.map((lesson, idx) =>
+        <Card.Group style={styles.card}>
+          {lessonCount == 0 && <EmptyListFallback url={props.url} />}
+          {lessonCount > 0 && lessons.map((lesson, idx) =>
             <LessonItem
               key={idx}
               user={props.user}
@@ -54,6 +90,7 @@ const LessonList = (props) => {
               id={lesson._id}
               description={lesson.description}
               date={lesson.date}
+              code={lesson.code}
               onDelete={onLessonDelete}
             />
           )}
@@ -62,5 +99,19 @@ const LessonList = (props) => {
     </React.Fragment>
   );
 };
+
+const styles = {
+  header: {
+    fontFamily: 'Stalinist One, cursive',
+    fontSize: '30px',
+    textShadow: '4px 4px gray',
+    WebkitTextStrokeWidth: '0.1px',
+    WebkitTextStrokeColor: 'black'
+  },
+  card: {
+    border: 'solid 2.1px #cfcfcf',
+    borderRadius: '6px'
+  }
+}
 
 export default LessonList;

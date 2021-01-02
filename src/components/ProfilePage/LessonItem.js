@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Item, Dropdown, Button, Card, Divider, Segment, Grid } from 'semantic-ui-react';
+import { Item, Dropdown, Button, Card, Divider, Segment, Grid, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import { baseURI, port } from '../../config';
 
@@ -27,39 +27,53 @@ const LessonItem = (props) => {
 
   const handleEdit = e => {
     // Edit code of the lesson
-    console.log(props.header)
+    console.log(props.header, props.description, props.code)
   }
-
-  return (
-    <Card fluid>
-      <Grid columns={2} divided padded>
-        <Grid.Column >
-          <Card>
-            <Item.Content>
-              <Card.Header style={{ fontFamily: 'Source Code Pro' }}>
-                {props.header}
-              </Card.Header>
-              <Card.Meta>Posted on {getPostDate(props.date)}</Card.Meta>
-              <Card.Content description={props.description}></Card.Content>
-            </Item.Content>
-          </Card>
-        </Grid.Column>
-        <Grid.Column verticalAlign='middle' width='6'>
-          <Button.Group floated='left' size='small' color='black'>
-            <Button secondary >
+  if (!props.noLesson)
+    return (
+      <Card fluid>
+        <Grid columns={2} divided padded>
+          <Grid.Column >
+            <Card>
+              <Item.Content>
+                <Card.Header style={{ fontFamily: 'Source Code Pro' }}>
+                  {props.header}
+                </Card.Header>
+                <Card.Meta>Posted on {getPostDate(props.date)}</Card.Meta>
+                <Card.Content description={props.description}></Card.Content>
+              </Item.Content>
+            </Card>
+          </Grid.Column>
+          <Grid.Column verticalAlign='middle' width='6'>
+            <Button.Group floated='left' size='small' color='black'>
               <Link to={`/app/users/${props.user}/lesson/${props.id}`}>
-                <p style={{ color: 'white' }}>Code !</p>
+                <Button secondary >
+                  <p style={{ color: 'white' }}>Code !</p>
+                </Button>
               </Link>
-            </Button>
-            <Dropdown className='button icon'>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={handleDelete} text='Delete Lesson' icon='trash' />
-                <Dropdown.Item onClick={handleEdit} text='Edit Lesson' icon='edit' />
-              </Dropdown.Menu>
-            </Dropdown>
-          </Button.Group>
-        </Grid.Column>
-      </Grid>
+              <Dropdown className='button icon'>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={handleDelete} text='Delete Lesson' icon='trash' />
+                  <Dropdown.Item onClick={handleEdit} text='Edit Lesson' icon='edit' />
+                </Dropdown.Menu>
+              </Dropdown>
+            </Button.Group>
+          </Grid.Column>
+        </Grid>
+      </Card>
+    );
+  else return (
+    <Card fluid style={{ padding: '10px' }}>
+      <Header size='large' style={{ fontFamily: 'Acme' }}>
+        Hey Typecoder 👋 !
+      </Header>
+      <p style={{ fontFamily: 'Consolas' }}>
+        <strong>
+          Seems like you're new here since you don't have any personal
+          lessons yet. But don't worry, we got you covered. Here are some favorites
+          from <a target="_blank" href="https://github.com/ankingcodes">@ankingcodes's</a> lessons.
+        </strong>
+      </p>
     </Card>
   );
 };

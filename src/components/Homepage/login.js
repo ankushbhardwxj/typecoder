@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faGithub, faGoogle} from '@fortawesome/free-brands-svg-icons';
-import {Button, Card, Container, Divider, Form, Grid} from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { Button, Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
 import axios from 'axios';
-import {Link, Redirect, BrowserRouter} from 'react-router-dom';
-import {baseURI, port} from '../../config';
+import { Link, Redirect, BrowserRouter } from 'react-router-dom';
+import { baseURI, port } from '../../config';
 
 const SignInWith = (props) => {
   return (
@@ -33,7 +33,7 @@ const SignInForm = () => {
     if (key == 'password') {
       setPassword(value);
     }
-    if (!login && key == 'fullname') {
+    if (!login && key == 'fullName') {
       setfullname(value);
     }
     if (!login && key == 'email') {
@@ -52,8 +52,11 @@ const SignInForm = () => {
         password: password,
       },
     })
-        .then((r) => console.log('POST METHOD DONE !'))
-        .catch((err) => console.log('ERROR !' + err));
+      .then((r) => {
+        console.log('POST METHOD DONE !')
+        toggleSignIn(!signIn);
+      })
+      .catch((err) => console.log('ERROR !' + err));
   };
 
   const handleSignIn = async () => {
@@ -65,11 +68,11 @@ const SignInForm = () => {
         password: password,
       },
     })
-        .then(() => {
-          console.log('POST (Sign in) Done !');
-          toggleSignIn(!signIn);
-        })
-        .catch((err) => console.log(err));
+      .then(() => {
+        console.log('POST (Sign in) Done !');
+        toggleSignIn(!signIn);
+      })
+      .catch((err) => console.log(err));
   };
 
   if (signIn) {
@@ -82,7 +85,7 @@ const SignInForm = () => {
     <Card style={styles.container}>
       <Card.Content>
         <Card.Header>
-          <h2 style={styles.header}>TypeCode</h2>
+          <h2 style={styles.header}>TypeCode ☕</h2>
         </Card.Header>
         <Divider />
         <Form>
@@ -127,14 +130,14 @@ const SignInForm = () => {
       <Card.Content extra>
         {
           login ? (
-            <p style={{color: 'black'}}>
+            <p style={{ color: 'black' }}>
               Don't have an account ?
               <span
                 style={styles.link}
                 onClick={() => toggleLogin(false)}>{' Sign up'}</span>
             </p>
           ) : (
-              <p style={{color: 'black'}}>
+              <p style={{ color: 'black' }}>
                 Have an account ?
                 <span
                   style={styles.link}
@@ -143,7 +146,7 @@ const SignInForm = () => {
             )
         }
         <a
-          style={{color: '#1f6f8b', cursor: 'pointer', fontSize: '12px'}}>
+          style={{ color: '#1f6f8b', cursor: 'pointer', fontSize: '12px' }}>
           Forgot password ?
         </a>
       </Card.Content>
@@ -153,14 +156,14 @@ const SignInForm = () => {
 
 const Login = () => {
   return (
-    <Container textAlign="center" style={{paddingTop: '60px'}}>
+    <Container textAlign="center" style={{ paddingTop: '60px' }}>
       <SignInForm />
     </Container>
   );
 };
 
 const styles = {
-  link: {color: '#1f6f8b', cursor: 'pointer'},
+  link: { color: '#1f6f8b', cursor: 'pointer' },
   icon: {
     color: 'black',
     paddingLeft: '20px',

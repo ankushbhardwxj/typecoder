@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
 const NavBar = (props) => {
@@ -6,7 +7,9 @@ const NavBar = (props) => {
     <React.Fragment>
       <Menu style={styles.navbar}>
         <Menu.Item>
-          <h3 style={styles.logo}> TypeCode ☕ </h3>
+          <Link to='/app'>
+            <h3 style={styles.logo}> TypeCode ☕ </h3>
+          </Link>
         </Menu.Item>
       </Menu>
     </React.Fragment>
