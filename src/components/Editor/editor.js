@@ -20,8 +20,10 @@ class Editor extends React.Component {
       pause: false,
       delete: false,
       totalTyped: 0,
+      description: '',
+      language: '',
       pressedKey: '',
-      gameOver: false,
+      gameOver: true, // change this to false
       incorrect: false,
       incorrectSpanIdx: null,
       incorrectLetters: '',
@@ -38,6 +40,7 @@ class Editor extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
+    if(this.codeRef.current !== null) // get rid of this
     this.codeRef.current.addEventListener('click', this.handleClick);
     const id = this.props.match.params.lessonTitle;
     const user = this.props.match.params.user
@@ -49,8 +52,10 @@ class Editor extends React.Component {
       .then(res => {
         this.setState({
           code: res.code,
-          size: [...res.code].length,
-          title: res.title
+          size: [...res.code].length > 600 ? 600: [...res.code].length,
+          title: res.title,
+          language: res.language,
+          description: res.description
         })
       })
       .catch(err => console.log(err))
@@ -154,17 +159,17 @@ class Editor extends React.Component {
         onClick={this.handleUnpauseClick}
       >
         <Header
+          language={this.state.language}
+          description={this.state.description}
           totalTyped={this.state.totalTyped}
           pause={this.props.pause}
           title={this.state.title}
+          gameOver={this.state.gameOver}
         />
         {!this.state.gameOver &&
           <pre
             onClick={this.handlePauseClick}
-            style={{
-              background: '#2e2d2c', color: 'white',
-              fontWeight: 'bold', paddingLeft: '20px'
-            }}>
+            style={styles.codeArea}>
             <code
               ref={this.codeRef}
               className={'python'}
@@ -172,39 +177,41 @@ class Editor extends React.Component {
               {[...this.state.code].map((chr, idx) => {
                 // give certain classnames for different entities
                 const chrCode = chr.charCodeAt(chr.length - 1);
-                if (idx == this.state.idx) {
-                  // render component for Enter
-                  if (chrCode == 10) {
-                    return (
-                      <Cursor key={idx} class={'return'} activeKey={idx} children={`↵ ${chr}`} />
-                    );
-                  }
-                  // render component for current cursor position
-                  if (!this.state.incorrect) {
-                    return (
-                      <Cursor key={idx} class={`active`} activeKey={idx} children={chr} />
-                    );
-                  } else {
-                    return (
-                      <Cursor key={idx} class={`active-arrow`} activeKey={idx} children={'<='} />
-                    );
-                  }
-                } else {
-                  // render component for all other char except cursor
-                  if (this.state.idx >= idx) {
-                    if (this.state.incorrect && (idx) == this.state.incorrectSpanIdx) {
+                if (idx < 600){
+                  if (idx == this.state.idx) {
+                    // render component for Enter
+                    if (chrCode == 10) {
                       return (
-                        <Cursor key={idx} class={`incorrect`} activeKey={idx} children={chr} />
+                        <Cursor key={idx} class={'return'} activeKey={idx} children={`↵ ${chr}`} />
+                      );
+                    }
+                    // render component for current cursor position
+                    if (!this.state.incorrect) {
+                      return (
+                        <Cursor key={idx} class={`active`} activeKey={idx} children={chr} />
                       );
                     } else {
                       return (
-                        <Cursor key={idx} class={`done`} activeKey={idx} children={chr} />
+                        <Cursor key={idx} class={`active-arrow`} activeKey={idx} children={'<='} />
                       );
                     }
                   } else {
-                    return (
-                      <Cursor key={idx} activeKey={idx} children={chr} />
-                    );
+                    // render component for all other char except cursor
+                    if (this.state.idx >= idx) {
+                      if (this.state.incorrect && (idx) == this.state.incorrectSpanIdx) {
+                        return (
+                          <Cursor key={idx} class={`incorrect`} activeKey={idx} children={chr} />
+                        );
+                      } else {
+                        return (
+                          <Cursor key={idx} class={`done`} activeKey={idx} children={chr} />
+                        );
+                      }
+                    } else {
+                      return (
+                        <Cursor key={idx} activeKey={idx} children={chr} />
+                      );
+                    }
                   }
                 }
               })}
@@ -216,5 +223,13 @@ class Editor extends React.Component {
   }
 }
 
+const styles = {
+  codeArea: {
+    background: '#2e2d2c', color: 'white',
+    fontWeight: 'bold', paddingLeft: '20px',
+    paddingTop: '10px', minHeight: '500px',
+  },
+  
+};
 export default withRouter(Editor);
 
