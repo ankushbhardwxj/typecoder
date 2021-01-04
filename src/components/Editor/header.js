@@ -11,7 +11,9 @@ const Header = (props) => {
           <Label tag color='black'>{props.language}</Label>
         </h2>
         <h3 style={styles.totalTyped}>Total Typed: {props.totalTyped}</h3>
-        <Timer totalTyped={props.totalTyped} gameOver={props.gameOver}/>
+        <Timer 
+          totalTyped={props.totalTyped} 
+          gameOver={props.gameOver}/>
       </Container>
     </>
   );

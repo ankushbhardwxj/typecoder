@@ -24,8 +24,9 @@ const Timer = props => {
     } else {
       clearTimeout(id);
     }
-    if(props.gameOver)
+    if(props.gameOver){
       clearTimeout(id);
+    }
   },);
 
   const cDigits = num => {

@@ -15,6 +15,7 @@ class Editor extends React.Component {
     super(props);
     this.state = {
       idx: 0,
+      size: 0,
       code: '',
       title: '',
       pause: false,
@@ -23,7 +24,7 @@ class Editor extends React.Component {
       description: '',
       language: '',
       pressedKey: '',
-      gameOver: true, // change this to false
+      gameOver: false, // change this to false
       incorrect: false,
       incorrectSpanIdx: null,
       incorrectLetters: '',
@@ -217,7 +218,15 @@ class Editor extends React.Component {
               })}
             </code>
           </pre>}
-        {this.state.gameOver && <GameOverComponent />}
+        {
+          this.state.gameOver && 
+          <GameOverComponent 
+            totalTyped={this.state.totalTyped}   
+            correctKeys={this.state.correctLetters}
+            incorrectKeys={this.state.allIncorrect}
+            totalLengthCode={this.state.size}
+          />
+        }
       </div>
     );
   }
@@ -231,5 +240,6 @@ const styles = {
   },
   
 };
+
 export default withRouter(Editor);
 
