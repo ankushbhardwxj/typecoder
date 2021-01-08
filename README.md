@@ -1,8 +1,8 @@
 ![37](https://user-images.githubusercontent.com/40923324/99508842-14338800-29ab-11eb-9c0b-4f8acd7a0529.PNG)
 
-### The ultimate typing platform for programmers.
+<img src='typecodeGIF.gif' width='900' height='700' />
 
-<img src='typecodeGIF.gif' />
+### The ultimate typing platform for programmers.
 
 Most typing platforms simply present stories or random words to practice which works well for average people but not for the lethal, fast, perfectionist programmers who cannot afford to be slow and have typos when they code.
 
