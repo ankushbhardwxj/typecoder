@@ -2,6 +2,8 @@
 
 ### The ultimate typing platform for programmers.
 
+<img src='typecodeGIF.gif' />
+
 Most typing platforms simply present stories or random words to practice which works well for average people but not for the lethal, fast, perfectionist programmers who cannot afford to be slow and have typos when they code.
 
 ### Features of TypeCode
@@ -18,6 +20,6 @@ git clone https://github.com/ankingcodes/typecode.git
 ```
 - Type `npm install` or `yarn install` to install all packages required for the client & server.
 - Make sure you have MongoDB installed, type `sudo service mongodb start` to start it on your local machine.
-- Run `yarn start` in the root directory of project (for client server) & `nodemon app.js` in the server directory to start the server.  
+- Run `npm run dev` in the project folder to start the client server & backend server.
 - If you like the project, hit the star button. 
 
