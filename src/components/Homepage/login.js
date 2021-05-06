@@ -26,6 +26,7 @@ const SignInForm = () => {
   const [fullname, setfullname] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleUserInput = (key, value) => {
     if (key == 'username') {
@@ -42,6 +43,25 @@ const SignInForm = () => {
     }
   };
 
+  const addMetadataToLocalStorage = (username) => {
+    let storage = window.localStorage;
+    if (storage.getItem('username') !== username && 
+      storage.getItem('loggedItem') !== true) {
+      storage.setItem('username', username);
+      storage.setItem('loggedIn', true);
+    }
+  }
+
+  const handleErrorMessage = (username, password) => {
+    if (username.length == 0 && password.length == 0) 
+      setErrorMessage('Enter username and password.');
+    else if (username.length == 0) 
+      setErrorMessage('Enter your username.');
+    else if (password.length == 0)
+      setErrorMessage('Enter your password.');
+    else setErrorMessage('Incorrect username or password.'); 
+  }
+
   const handleSubmit = () => {
     axios({
       method: 'POST',
@@ -54,10 +74,14 @@ const SignInForm = () => {
       },
     })
       .then(() => {
-        console.log('POST METHOD DONE !')
+        console.log('POST METHOD DONE !');
+        addMetadataToLocalStorage(username);
         toggleSignIn(!signIn);
       })
-      .catch((err) => console.log('ERROR !' + err));
+      .catch((err) => {
+        console.log('ERROR !' + err)
+        handleErrorMessage(username, password);
+      });
   };
 
   const handleSignIn = () => {
@@ -71,9 +95,13 @@ const SignInForm = () => {
     })
       .then(() => {
         console.log('POST (Sign in) Done !');
+        addMetadataToLocalStorage(username);
         toggleSignIn(!signIn);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        handleErrorMessage(username, password);
+      });
   };
 
   const togglePassword = () => {
@@ -123,6 +151,9 @@ const SignInForm = () => {
               />}
               onChange={(e) => handleUserInput('password', e.target.value)}
               id='Password' type='password' placeholder='Password' />
+          </Form.Field>
+          <Form.Field>
+            {errorMessage.length > 0 && <p style={styles.errorMessage}>{errorMessage}</p>}
           </Form.Field>
           {!login ? (
             <Button onClick={handleSubmit} secondary>Sign Up</Button>
@@ -215,5 +246,8 @@ const styles = {
     fontFamily: 'Constantine',
     color: 'black',
   },
+  errorMessage: {
+    color: '#c73b32'
+  }
 };
 export default Login;

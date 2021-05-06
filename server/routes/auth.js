@@ -5,7 +5,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 // signup
-router.post('/signup', (req, res, next) => {
+router.post('/signup', (req, res) => {
   bcrypt.hash(req.body.password, 12)
       .then((hashedPassword)=>{
         const user = new User({
@@ -14,6 +14,7 @@ router.post('/signup', (req, res, next) => {
           fullName: req.body.fullName,
           username: req.body.username,
           password: hashedPassword,
+          date: new Date().toLocaleString(),
         });
         user.save()
             .then((result) => {
@@ -38,7 +39,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 // signin
-router.post('/signin', (req, res, next) => {
+router.post('/signin', (req, res) => {
   User.findOne({username: req.body.username}).exec()
       .then((user) => {
         bcrypt.compare(req.body.password, user.password)
