@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { Button, Card, Container, Divider, Form, Grid } from 'semantic-ui-react';
+import { Button, Card, Container, 
+  Divider, Form, Grid, Input, Icon } from 'semantic-ui-react';
 import axios from 'axios';
-import { Link, Redirect, BrowserRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { baseURI, port } from '../../config';
 
 const SignInWith = (props) => {
@@ -52,7 +53,7 @@ const SignInForm = () => {
         password: password,
       },
     })
-      .then((r) => {
+      .then(() => {
         console.log('POST METHOD DONE !')
         toggleSignIn(!signIn);
       })
@@ -74,6 +75,12 @@ const SignInForm = () => {
       })
       .catch((err) => console.log(err));
   };
+
+  const togglePassword = () => {
+    const pwdText = document.getElementById('Password');
+    if (pwdText.type == 'password') pwdText.type = 'text';
+    else pwdText.type = 'password';
+  }
 
   if (signIn) {
     return (
@@ -103,11 +110,18 @@ const SignInForm = () => {
             </>
           )}
           <Form.Field>
-            <input onChange={(e) => handleUserInput('username', e.target.value)}
+            <Input size='small' 
+              onChange={(e) => handleUserInput('username', e.target.value)}
               id='Username' placeholder='Username' />
           </Form.Field>
           <Form.Field>
-            <input onChange={(e) => handleUserInput('password', e.target.value)}
+            <Input
+              size='small' 
+              icon={<Icon name='eye' 
+                link onMouseEnter={togglePassword}
+                onMouseLeave={togglePassword}
+              />}
+              onChange={(e) => handleUserInput('password', e.target.value)}
               id='Password' type='password' placeholder='Password' />
           </Form.Field>
           {!login ? (
