@@ -4,16 +4,27 @@ import {Link} from 'react-router-dom';
 
 const GameOverComponent = props => {
   const details = useRef(null);
+  const [time, setTime] = useState('');
 
   useEffect(() => {
     details.current.scrollIntoView({behavior: 'smooth'}) 
+    const timeString = document.getElementById('timeString').innerText;
+    setTime(timeString);
   })
 
   const getPercent = (value, total) => {
     let ans = (value/total)*100;
     return ans>0 ? ans : 0;
   }
-  console.log(props);
+
+  const calculateWPM = () => {
+    const totalTypableChars = [...props.correctKeys].length;
+    let testDurationInMinutes = parseInt(time.split(' : ')[1]);
+    testDurationInMinutes = testDurationInMinutes == 0 ? 1 : testDurationInMinutes;
+    const WPM = (totalTypableChars / 5)*(1/testDurationInMinutes);
+    return WPM;
+  }
+
   return (
     <div style={styles.container}>
       <Header as='h2' style={styles.gameOver}>GAME OVER !</Header>
@@ -40,7 +51,12 @@ const GameOverComponent = props => {
             percent
           />
           <TableRow
+            text="Elapsed time"
+            value={time}
+          />
+          <TableRow
             text="WPM"
+            value={calculateWPM()}
           />
         </Table>
       </div>
@@ -106,7 +122,10 @@ const styles = {
     borderBottom: '2px solid #636363'
   }, 
   button: {
-    marginTop: '10px'
+    marginTop: '10px',
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   }
 };
 

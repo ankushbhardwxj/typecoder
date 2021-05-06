@@ -6,6 +6,7 @@ const Timer = props => {
   const [minutes, updateMinutes] = useState(0);
   const [hours, updateHours] = useState(0);
   const [pause, togglePause] = useState(false);
+  const [timeString, updateTimeString] = useState('');
 
   useEffect(() => {
     let id;
@@ -27,7 +28,9 @@ const Timer = props => {
     if(props.gameOver){
       clearTimeout(id);
     }
-  },);
+    const timeString = `${cDigits(hours)} : ${cDigits(minutes)} : ${cDigits(seconds)}`;
+    updateTimeString(timeString);
+  });
 
   const cDigits = num => {
     let numString = String(num).length;
@@ -44,8 +47,8 @@ const Timer = props => {
     <React.Fragment>
       <Step.Group>
         <Step style={{backgroundColor: 'black'}}>
-          <Header as='h3' style={styles.timer}>
-            {cDigits(hours)} : {cDigits(minutes)} : {cDigits(seconds)}
+          <Header id='timeString' as='h3' style={styles.timer}>
+            {timeString}
           </Header>
         </Step>
         <Step>

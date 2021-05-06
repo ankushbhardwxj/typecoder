@@ -22,9 +22,9 @@ const Profile = props => {
                 email={props.email}
               />
             </Grid.Row>
-            <Grid.Row>
+            {/*<Grid.Row>
               <RecentActivity />
-            </Grid.Row>
+            </Grid.Row>*/}
           </Grid.Column>
           <Grid.Column>
             <LessonList
