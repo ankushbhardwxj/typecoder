@@ -78,4 +78,5 @@ router.delete('/:user/lesson/:lessonId', async (req, res) => {
     res.status(500).json({error: err});
   }
 });
+
 module.exports = router;
