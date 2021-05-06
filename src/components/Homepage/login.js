@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { Button, Card, Container, 
@@ -110,11 +110,20 @@ const SignInForm = () => {
     else pwdText.type = 'password';
   }
 
+  useEffect(() => {
+    const storage = window.localStorage;
+    if (storage.getItem('loggedIn') == 'true') {
+      toggleSignIn(true);
+      setUsername(storage.getItem('username'));
+    }
+  });
+
   if (signIn) {
     return (
       <Redirect to={`/app/users/${username}/profile`} />
     );
   }
+
 
   return (
     <Card style={styles.container}>

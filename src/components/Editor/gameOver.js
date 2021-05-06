@@ -1,5 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {Header, Grid, Table} from 'semantic-ui-react';
+import {Header, Grid, Table, Button} from 'semantic-ui-react';
+import {Link} from 'react-router-dom';
 
 const GameOverComponent = props => {
   const details = useRef(null);
@@ -12,7 +13,7 @@ const GameOverComponent = props => {
     let ans = (value/total)*100;
     return ans>0 ? ans : 0;
   }
-
+  console.log(props);
   return (
     <div style={styles.container}>
       <Header as='h2' style={styles.gameOver}>GAME OVER !</Header>
@@ -42,7 +43,10 @@ const GameOverComponent = props => {
             text="WPM"
           />
         </Table>
-      </div>  
+      </div>
+      <Link to={`/app/users/${props.username}/profile`}>
+        <Button style={styles.button} secondary> Back to Lessons </Button>
+      </Link>
     </div>
   );
 }
@@ -69,6 +73,7 @@ const styles = {
   container: {
     marginTop: '10px',
     background: '#2b2a28',
+    paddingBottom: '30px'
   },
   gameOver: {
     fontFamily: 'Stalinist One, cursive',
@@ -99,6 +104,9 @@ const styles = {
   },
   border: {
     borderBottom: '2px solid #636363'
+  }, 
+  button: {
+    marginTop: '10px'
   }
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Button } from 'semantic-ui-react';
 
 const NavBar = (props) => {
   return (
@@ -9,6 +9,11 @@ const NavBar = (props) => {
         <Menu.Item>
           <Link to='/app'>
             <h3 style={styles.logo}> TypeCode ☕ </h3>
+          </Link>
+        </Menu.Item>
+        <Menu.Item position='right'>
+          <Link to='/app'>
+            <Button secondary> Logout </Button>
           </Link>
         </Menu.Item>
       </Menu>

@@ -21,6 +21,7 @@ class Editor extends React.Component {
       pause: false,
       delete: false,
       totalTyped: 0,
+      username: '',
       description: '',
       language: '',
       pressedKey: '',
@@ -44,7 +45,10 @@ class Editor extends React.Component {
     if(this.codeRef.current !== null) // get rid of this
     this.codeRef.current.addEventListener('click', this.handleClick);
     const id = this.props.match.params.lessonTitle;
-    const user = this.props.match.params.user
+    const pathName = this.props.match.url.split('/');
+    const idx = pathName.findIndex((token) => token == 'users');
+    const user = pathName[idx+1]; 
+    this.setState({ username: user });
     axios({
       method: 'GET',
       url: `${baseURI}:${port}/users/${user}/lesson/${id}`
@@ -225,6 +229,7 @@ class Editor extends React.Component {
             correctKeys={this.state.correctLetters}
             incorrectKeys={this.state.allIncorrect}
             totalLengthCode={this.state.size}
+            username={this.state.username}
           />
         }
       </div>

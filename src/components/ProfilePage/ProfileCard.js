@@ -1,7 +1,5 @@
-import React from 'react';
-import style from 'react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark';
+import React, {useState} from 'react';
 import { Container, Image, Card } from 'semantic-ui-react';
-import Social from './Social';
 
 const ProfileCard = (props) => {
   const getJoinDate = (timestamp) => {
@@ -32,9 +30,6 @@ const ProfileCard = (props) => {
               </em>
             </span>
           </Card.Meta>
-        </Card.Content>
-        <Card.Content extra>
-          <Social email={props.email} />
         </Card.Content>
       </Card>
     </Container>
