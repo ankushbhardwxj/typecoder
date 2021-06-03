@@ -1,68 +1,52 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const mongoose = require('mongoose');
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 
 // signup
-router.post('/signup', (req, res) => {
-  bcrypt.hash(req.body.password, 12)
-      .then((hashedPassword)=>{
-        const user = new User({
-          _id: new mongoose.Types.ObjectId(),
-          email: req.body.email,
-          fullName: req.body.fullName,
-          username: req.body.username,
-          password: hashedPassword,
-          date: new Date().toLocaleString(),
-        });
-        user.save()
-            .then((result) => {
-              console.log(result);
-              res.status(201).json({
-                message: 'User signed up successfully',
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-              res.status(500).json({
-                error: err,
-              });
-            });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({
-          error: err,
-        });
-      });
+router.post("/signup", async (req, res) => {
+  try {
+    let { username, password, fullName, email } = req.body;
+    let encryptedPassword = await bcrypt.hash(password, 12);
+    const userObject = new User({
+      _id: new mongoose.Types.ObjectId(),
+      email: email,
+      fullName: fullName,
+      username: username,
+      password: encryptedPassword,
+      date: new Date().toLocaleString(),
+    });
+    await userObject.save();
+    res.status(201).json({
+      action: "User sign up successful !",
+      user: userObject,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err });
+  }
 });
 
 // signin
-router.post('/signin', (req, res) => {
-  User.findOne({username: req.body.username}).exec()
-      .then((user) => {
-        bcrypt.compare(req.body.password, user.password)
-            .then((domatch)=>{
-              if (domatch) {
-                res.status(200).json({
-                  message: 'Sign in successful !',
-                });
-              } else {
-                return res.status(500).json({
-                  error: 'Sorry !! email and password is not match',
-                });
-              }
-            })
-            .catch((err)=>{
-              console.log(err);
-            });
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          error: err,
-        });
-      });
+router.post("/signin", async (req, res) => {
+  try {
+    let { username, password } = req.body;
+    let { password: actualPassword } = await User.findOne({
+      username: username,
+    }).exec();
+    await bcrypt.compare(password, actualPassword);
+    res.status(201).json({
+      action: "User sign in successful !",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err });
+  }
 });
+
+// github oauth
+
+// google oauth
 
 module.exports = router;

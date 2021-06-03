@@ -5,11 +5,18 @@
         "es2021": true
     },
     "extends": [
-        "google"
+        "eslint:recommended",
+        "plugin:react/recommended"
     ],
     "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
         "ecmaVersion": 12
     },
+    "plugins": [
+        "react"
+    ],
     "rules": {
     }
 }
