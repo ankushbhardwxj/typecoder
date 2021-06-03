@@ -10,7 +10,7 @@ const GitHubStrategy = require("passport-github2").Strategy;
 const app = express();
 
 dotenv.config();
-const PORT = process.env.PORT;
+const PORT = process.env.SERVER_PORT;
 // fetch routes
 const authRoutes = require("./routes/auth");
 const userInfoRoutes = require("./routes/users");
@@ -52,17 +52,14 @@ passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) => done(null, id));
 
 // Github OAuth passport config
-const GITHUB_CLIENT_ID = "875e09e504840d8ef63e";
-const GITHUB_CLIENT_SECRET = "28e593fbed8bf0989f34948e3ab01046e987bba7";
 passport.use(
   new GitHubStrategy(
     {
-      clientID: GITHUB_CLIENT_ID,
-      clientSecret: GITHUB_CLIENT_SECRET,
-      callbackURL: "http://localhost:8080/auth/github/callback",
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: process.env.GITHUB_CALLBACK_URI,
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
       process.nextTick(() => done(null, profile));
     }
   )
@@ -71,20 +68,6 @@ passport.use(
 // Controllers
 app.use("/auth", authRoutes);
 app.use("/users", userInfoRoutes);
-
-// Github OAUTH callback
-/*
-app.get(
-  "/auth/github",
-  passport.authenticate("github", { scope: ["user:email"] })
-);
-app.get(
-  "/auth/github/callback",
-  passport.authenticate("github", { failureRedirect: "/login" }),
-  (res) => {
-    console.log(res);
-  }
-);*/
 
 // Listening to port
 app.listen(PORT, () => {

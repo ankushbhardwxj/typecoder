@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouteMatch } from 'react-router-dom';
-import NavBar from './NavBar';
-import axios from 'axios';
-import { baseURI, port } from '../../config';
-import Profile from './MainProfilePage';
+import React, { useEffect, useState } from "react";
+import { useParams, useRouteMatch } from "react-router-dom";
+import NavBar from "./NavBar";
+import axios from "axios";
+import { baseURI, port } from "../../config";
+import Profile from "./MainProfilePage";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
-} from 'react-router-dom';
-import { Container } from 'semantic-ui-react';
-import Editor from '../Editor/editor';
+  Redirect,
+} from "react-router-dom";
+import { Container } from "semantic-ui-react";
+import Editor from "../Editor/editor";
 
-const ProfilePage = props => {
+const ProfilePage = (props) => {
   const { user } = useParams();
   const { url } = useRouteMatch();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [dateOfJoin, setDateOfJoin] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [dateOfJoin, setDateOfJoin] = useState("");
 
   useEffect(() => {
     // TODO: fix multiple render issue here
     axios({
-      method: 'GET',
+      method: "GET",
       url: `${baseURI}:${port}/users/${user}/info`,
     })
       .then((res) => res.data)
@@ -63,6 +63,5 @@ const ProfilePage = props => {
     </React.Fragment>
   );
 };
-
 
 export default ProfilePage;

@@ -16,9 +16,27 @@ import { Redirect } from "react-router-dom";
 import { baseURI, port } from "../../config";
 
 const SignInWith = (props) => {
+  const handleClick = (e) => {
+    axios({
+      method: "GET",
+      url: `${baseURI}:${port}/auth/${props.AuthName}`,
+    })
+      .then(() => {
+        console.log("OAuth Github login.");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div style={styles.icon}>
-      <FontAwesomeIcon icon={props.icon} size="2x" />
+      <a
+        href={`${baseURI}:${port}/auth/${props.AuthName}`}
+        style={{ color: "black" }}
+      >
+        <FontAwesomeIcon icon={props.icon} size="2x" />
+      </a>
     </div>
   );
 };
@@ -47,17 +65,6 @@ const SignInForm = () => {
     }
   };
 
-  const addMetadataToLocalStorage = (username) => {
-    let storage = window.localStorage;
-    if (
-      storage.getItem("username") !== username &&
-      storage.getItem("loggedItem") !== true
-    ) {
-      storage.setItem("username", username);
-      storage.setItem("loggedIn", true);
-    }
-  };
-
   const handleErrorMessage = (username, password) => {
     if (username.length == 0 && password.length == 0)
       setErrorMessage("Enter username and password.");
@@ -79,7 +86,6 @@ const SignInForm = () => {
     })
       .then(() => {
         console.log("POST METHOD DONE !");
-        addMetadataToLocalStorage(username);
         toggleSignIn(!signIn);
       })
       .catch((err) => {
@@ -99,7 +105,6 @@ const SignInForm = () => {
     })
       .then(() => {
         console.log("POST (Sign in) Done !");
-        addMetadataToLocalStorage(username);
         toggleSignIn(!signIn);
       })
       .catch((err) => {
