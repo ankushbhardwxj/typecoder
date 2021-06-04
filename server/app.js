@@ -13,6 +13,7 @@ const PORT = process.env.SERVER_PORT;
 // fetch routes
 const authRoutes = require("./routes/auth");
 const userInfoRoutes = require("./routes/users");
+const resultRoutes = require("./routes/results");
 
 // connecting to mongodb database
 mongoose.connect(process.env.DB_URI, {
@@ -49,7 +50,7 @@ app.use(passport.session());
 
 // Controllers
 app.use("/auth", authRoutes);
-app.use("/users", userInfoRoutes);
+app.use("/users", userInfoRoutes, resultRoutes);
 
 // Listening to port
 app.listen(PORT, () => {

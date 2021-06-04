@@ -20,9 +20,7 @@ router.get("/:user/info", async (req, res) => {
 // get all public lessons of an user
 router.get("/:user/lessons", async (req, res) => {
   try {
-    console.log(req.params.user);
     const getLessons = await User.findOne({ username: req.params.user });
-    console.log(getLessons);
     const posts = getLessons.public_lessons;
     const results = await Lesson.find({ _id: { $in: posts } });
     res.status(201).json(results);

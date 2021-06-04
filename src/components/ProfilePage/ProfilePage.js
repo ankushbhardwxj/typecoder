@@ -20,6 +20,7 @@ const ProfilePage = (props) => {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [dateOfJoin, setDateOfJoin] = useState("");
+  const [notFound, toggleNotFound] = useState(false);
 
   useEffect(() => {
     // TODO: fix multiple render issue here
@@ -36,8 +37,35 @@ const ProfilePage = (props) => {
         setDateOfJoin(date);
         setFullName(fullName);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        toggleNotFound(!notFound);
+      });
   }, []);
+
+  // TODO: make a NOT FOUND component
+  const NotFoundDiv = (
+    <Route>
+      <div>404! Not Found !</div>
+    </Route>
+  );
+
+  const RouteDiv = (
+    <div>
+      <Route exact path={`${url}/profile`}>
+        <Profile
+          userParam={user}
+          fullName={fullName}
+          username={username}
+          email={email}
+          dateOfJoin={dateOfJoin}
+        />
+      </Route>
+      <Route exact path={`${url}/lesson/:lessonTitle`}>
+        <Editor />
+      </Route>
+    </div>
+  );
 
   return (
     <React.Fragment>
@@ -45,18 +73,8 @@ const ProfilePage = (props) => {
       <Router>
         <Container fluid>
           <Switch>
-            <Route exact path={`${url}/profile`}>
-              <Profile
-                userParam={user}
-                fullName={fullName}
-                username={username}
-                email={email}
-                dateOfJoin={dateOfJoin}
-              />
-            </Route>
-            <Route exact path={`${url}/lesson/:lessonTitle`}>
-              <Editor />
-            </Route>
+            {notFound && NotFoundDiv}
+            {!notFound && RouteDiv}
           </Switch>
         </Container>
       </Router>
