@@ -5,7 +5,6 @@ const compression = require("compression");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
-const GitHubStrategy = require("passport-github2").Strategy;
 
 const app = express();
 
@@ -44,26 +43,9 @@ app.use((req, res, next) => {
 });
 
 // initialise passport
+require("./config/passport");
 app.use(passport.initialize());
 app.use(passport.session());
-
-// serialize & deserialize user
-passport.serializeUser((user, done) => done(null, user.id));
-passport.deserializeUser((id, done) => done(null, id));
-
-// Github OAuth passport config
-passport.use(
-  new GitHubStrategy(
-    {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URI,
-    },
-    (accessToken, refreshToken, profile, done) => {
-      process.nextTick(() => done(null, profile));
-    }
-  )
-);
 
 // Controllers
 app.use("/auth", authRoutes);

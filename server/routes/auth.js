@@ -56,11 +56,51 @@ router.get(
   "/github/callback",
   passport.authenticate("github", { failureRedirect: "/login" }),
   async (req, res) => {
-    let { username, displayName } = req.user;
-    res.redirect(`http://localhost:3000/app/users/${username}/profile`);
+    let { login, name, email } = req.user._json;
+    let checkUser = await User.findOne({ username: login }).exec();
+    if (!checkUser) {
+      const userObject = new User({
+        _id: new mongoose.Types.ObjectId(),
+        email: email || "fake@gmail.com",
+        fullName: name,
+        username: login,
+        password: "OAUTH",
+        date: new Date().toLocaleString(),
+      });
+      await userObject.save();
+    }
+    res.redirect(`http://localhost:3000/app/users/${login}/profile`);
   }
 );
 
 // google oauth
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+router.get(
+  "/google/redirect",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  async (req, res) => {
+    let { name, email } = req.user._json;
+    let checkUser = await User.findOne({ email: email }).exec();
+    let userName = "";
+    if (!checkUser) {
+      userName = email.split("@")[0];
+      const userObject = new User({
+        _id: new mongoose.Types.ObjectId(),
+        email: email,
+        fullName: name,
+        username: userName,
+        password: "OAUTH",
+        date: new Date().toLocaleString(),
+      });
+      await userObject.save();
+    }
+    userName = checkUser.username;
+    res.redirect(`http://localhost:3000/app/users/${userName}/profile`);
+  }
+);
 
 module.exports = router;
