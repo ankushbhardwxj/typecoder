@@ -13,13 +13,13 @@ import {
 } from "semantic-ui-react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-import { baseURI, port } from "../../config";
+import { baseURI } from "../../config";
 
 const SignInWith = (props) => {
   const handleClick = (e) => {
     axios({
       method: "GET",
-      url: `${baseURI}:${port}/auth/${props.AuthName}`,
+      url: `${baseURI}/auth/${props.AuthName}`,
     })
       .then(() => {
         console.log("OAuth Github login.");
@@ -31,10 +31,7 @@ const SignInWith = (props) => {
 
   return (
     <div style={styles.icon}>
-      <a
-        href={`${baseURI}:${port}/auth/${props.AuthName}`}
-        style={{ color: "black" }}
-      >
+      <a href={`${baseURI}/auth/${props.AuthName}`} style={{ color: "black" }}>
         <FontAwesomeIcon icon={props.icon} size="2x" />
       </a>
     </div>
@@ -76,7 +73,7 @@ const SignInForm = () => {
   const handleSubmit = () => {
     axios({
       method: "POST",
-      url: `${baseURI}:${port}/auth/signup`,
+      url: `${baseURI}/auth/signup`,
       data: {
         email: email,
         fullName: fullname,
@@ -97,7 +94,7 @@ const SignInForm = () => {
   const handleSignIn = () => {
     axios({
       method: "POST",
-      url: `${baseURI}:${port}/auth/signin`,
+      url: `${baseURI}/auth/signin`,
       data: {
         username: username,
         password: password,

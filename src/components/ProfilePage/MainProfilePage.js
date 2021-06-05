@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { baseURI, port } from "../../config";
+import { baseURI } from "../../config";
 import ProfileCard from "./ProfileCard";
 import LessonList from "./LessonList";
 import { Grid, Container } from "semantic-ui-react";
@@ -47,7 +47,7 @@ const Profile = (props) => {
           </Grid.Column>
           <Grid.Column>
             <LessonList
-              url={`${baseURI}:${port}`}
+              url={`${baseURI}`}
               style={styles.container}
               username={props.username}
               user={props.userParam}

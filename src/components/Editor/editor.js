@@ -5,7 +5,7 @@ import Header from "./header";
 import GameOverComponent from "./gameOver";
 import { withRouter } from "react-router";
 import axios from "axios";
-import { baseURI, port } from "../../config";
+import { baseURI } from "../../config";
 
 // TODO: Improve this cursor to be like that of Google DOCS
 // also this needs a popping animation resembling to VIM
@@ -52,7 +52,7 @@ class Editor extends React.Component {
     this.setState({ username: user });
     axios({
       method: "GET",
-      url: `${baseURI}:${port}/users/${user}/lesson/${id}`,
+      url: `${baseURI}/users/${user}/lesson/${id}`,
     })
       .then((res) => res.data)
       .then((res) => {

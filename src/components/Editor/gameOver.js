@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Header, Grid, Table, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { baseURI, port } from "../../config";
+import { baseURI } from "../../config";
 import axios from "axios";
 
 const GameOverComponent = (props) => {
@@ -36,7 +36,7 @@ const GameOverComponent = (props) => {
     return () => {
       console.log(time, WPM);
       if (time !== "" && WPM !== null) {
-        const uri = `${baseURI}:${port}/users/${username}/${id}/saveResult`;
+        const uri = `${baseURI}/users/${username}/${id}/saveResult`;
         axios({
           method: "POST",
           url: uri,

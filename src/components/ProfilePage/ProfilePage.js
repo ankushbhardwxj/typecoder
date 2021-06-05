@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouteMatch } from "react-router-dom";
 import NavBar from "./NavBar";
 import axios from "axios";
-import { baseURI, port } from "../../config";
+import { baseURI } from "../../config";
 import Profile from "./MainProfilePage";
 import {
   BrowserRouter as Router,
@@ -26,7 +26,7 @@ const ProfilePage = (props) => {
     // TODO: fix multiple render issue here
     axios({
       method: "GET",
-      url: `${baseURI}:${port}/users/${user}/info`,
+      url: `${baseURI}/users/${user}/info`,
     })
       .then((res) => res.data)
       .then((res) => res[res.length - 1])
