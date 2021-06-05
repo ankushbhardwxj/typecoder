@@ -87,7 +87,6 @@ const SignInForm = () => {
       })
       .catch((err) => {
         console.log("ERROR !" + err);
-        handleErrorMessage(username, password);
       });
   };
 
