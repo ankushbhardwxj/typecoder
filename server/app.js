@@ -5,11 +5,12 @@ const compression = require("compression");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const path = require("path");
 
 const app = express();
 
 dotenv.config();
-const PORT = process.env.SERVER_PORT;
+const PORT = process.env.PORT;
 // fetch routes
 const authRoutes = require("./routes/auth");
 const userInfoRoutes = require("./routes/users");
