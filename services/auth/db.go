@@ -27,7 +27,18 @@ func connectAndCreateSchema() *pg.DB {
 	return db
 }
 
-func insertSignUpInfo(db *pg.DB, user User) error {
+func insertSignUpInfo(db *pg.DB, user User) {
 	_, err := db.Model(&user).Insert()
-	return err
+	if err != nil {
+		panic(err)
+	}
+}
+
+func getUserInfo(db *pg.DB, email string) string {
+	var user User
+	err := db.Model(&user).Column("password").Where("email = ?", email).Select()
+	if err != nil {
+		panic(err)
+	}
+	return user.Password
 }
