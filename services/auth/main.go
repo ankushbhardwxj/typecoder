@@ -18,8 +18,8 @@ func main() {
 	r.Use(gin.Logger())
 	v1 := r.Group("/api/v1")
 	{
-		v1.POST("/signIn", signInHandler)
-		v1.POST("/signUp", signUpHandler)
+		v1.POST("/signin", signInHandler)
+		v1.POST("/signup", signUpHandler)
 		// v1.POST("/sendOtp", hello)
 		// v1.POST("/verifyOtp", hello)
 		// v1.GET("/googleOAuth", hello)
