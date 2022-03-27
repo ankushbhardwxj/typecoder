@@ -20,8 +20,8 @@ func main() {
 	{
 		v1.POST("/signin", signInHandler)
 		v1.POST("/signup", signUpHandler)
-		// v1.POST("/sendOtp", hello)
-		// v1.POST("/verifyOtp", hello)
+		// v1.POST("/sendOtp", sendOTPHandler)
+		// v1.POST("/verifyOtp", verifyOTPHandler)
 		// v1.GET("/googleOAuth", hello)
 		// v1.GET("/googleOAuth/redirect", hello)
 	}

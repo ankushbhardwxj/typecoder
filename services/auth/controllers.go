@@ -55,6 +55,14 @@ func signInHandler(c *gin.Context) {
 	}
 }
 
+func sendOTPHandler(c *gin.Context) {
+
+}
+
+func verifyOTPHandler(c *gin.Context) {
+
+}
+
 func generateDigest(email string, password string) string {
 	h := sha256.New()
 	h.Write([]byte(email + password))
