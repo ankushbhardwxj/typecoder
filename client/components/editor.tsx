@@ -1,10 +1,12 @@
 import * as React from "react";
 import Cursor from "./cursor";
-
-const codeStr = `console.log("hello")`;
+import styles from "../styles/editor.module.css";
+import Restart from "./restart";
 
 type EditorProps = {
-
+  code: string;
+  title: string;
+  language: string;
 }
 
 type EditorState = {
@@ -35,7 +37,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.state = {
       idx: 0,
       size: 0,
-      code: codeStr,
+      code: this.props.code || "",
       title: "",
       pause: false,
       delete: false,
@@ -57,6 +59,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.handleClick = this.handleClick.bind(this);
     this.handlePauseClick = this.handlePauseClick.bind(this);
     this.handleUnpauseClick = this.handleUnpauseClick.bind(this);
+    this.handleRestart = this.handleRestart.bind(this);
   }
 
   handleKeyDown(e: KeyboardEvent) {
@@ -164,8 +167,30 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   }
 
+  handleRestart() {
+    this.setState({
+      idx: 0,
+      size: this.props.code.length,
+      code: this.props.code || "",
+      title: "",
+      pause: false,
+      delete: false,
+      totalTyped: 0,
+      username: "",
+      description: "",
+      language: "",
+      pressedKey: "",
+      gameOver: false, // change this to false
+      incorrect: false,
+      incorrectSpanIdx: null,
+      incorrectLetters: "",
+      correctLetters: [],
+      allIncorrect: [],
+    })
+  }
+
   componentDidMount() {
-    this.setState({ size: this.state.code.length })
+    this.setState({ size: this.props.code.length })
     document.addEventListener("keydown", this.handleKeyDown);
     if (this.codeRef.current !== null)
       // get rid of this
@@ -174,55 +199,32 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   render() {
     return (
-      <pre>
-        <code ref={this.codeRef} className={"python"}>
-          {[...this.state.code].map((chr, idx) => {
-            // give certain classnames for different entities
-            const chrCode = chr.charCodeAt(chr.length - 1);
-            if (idx < 600) {
-              if (idx == this.state.idx) {
-                // render component for Enter
-                if (chrCode == 10) {
-                  return (
-                    <Cursor
-                      key={idx}
-                      class={"return"}
-                      activeKey={idx}
-                      children={`↵ ${chr}`}
-                    />
-                  );
-                }
-                // render component for current cursor position
-                if (!this.state.incorrect) {
-                  return (
-                    <Cursor
-                      key={idx}
-                      class={`active`}
-                      activeKey={idx}
-                      children={chr}
-                    />
-                  );
-                } else {
-                  return (
-                    <Cursor
-                      key={idx}
-                      class={`active-arrow`}
-                      activeKey={idx}
-                      children={"<="}
-                    />
-                  );
-                }
-              } else {
-                // render component for all other char except cursor
-                if (this.state.idx >= idx) {
-                  if (
-                    this.state.incorrect &&
-                    idx == this.state.incorrectSpanIdx
-                  ) {
+      <div>
+        <h3 className={styles.editorHeader}> {this.props.title} [{this.props.language}] </h3>
+        <pre className={styles.editorContainer}>
+          <code ref={this.codeRef} className={styles.code}>
+            {[...this.state.code].map((chr, idx) => {
+              // give certain classnames for different entities
+              const chrCode = chr.charCodeAt(chr.length - 1);
+              if (idx < 600) {
+                if (idx == this.state.idx) {
+                  // render component for Enter
+                  if (chrCode == 10) {
                     return (
                       <Cursor
                         key={idx}
-                        class={`incorrect`}
+                        class={"return"}
+                        activeKey={idx}
+                        children={`↵ ${chr}`}
+                      />
+                    );
+                  }
+                  // render component for current cursor position
+                  if (!this.state.incorrect) {
+                    return (
+                      <Cursor
+                        key={idx}
+                        class={`active`}
                         activeKey={idx}
                         children={chr}
                       />
@@ -231,22 +233,60 @@ class Editor extends React.Component<EditorProps, EditorState> {
                     return (
                       <Cursor
                         key={idx}
-                        class={`done`}
+                        class={`active-arrow`}
                         activeKey={idx}
-                        children={chr}
+                        children={"<="}
                       />
                     );
                   }
                 } else {
-                  return (
-                    <Cursor key={idx} activeKey={idx} children={chr} />
-                  );
+                  // render component for all other char except cursor
+                  if (this.state.idx >= idx) {
+                    if (
+                      this.state.incorrect &&
+                      idx == this.state.incorrectSpanIdx
+                    ) {
+                      return (
+                        <Cursor
+                          key={idx}
+                          class={`incorrect`}
+                          activeKey={idx}
+                          children={chr}
+                        />
+                      );
+                    } 
+                    else if (this.state.incorrect && idx >= this.state.incorrectSpanIdx) {
+                      return (
+                        <Cursor 
+                          key={idx}
+                          class={`incorrect`}
+                          activeKey={idx}
+                          children={chr}
+                        />
+                      )
+                    }
+                    else {
+                      return (
+                        <Cursor
+                          key={idx}
+                          class={`done`}
+                          activeKey={idx}
+                          children={chr}
+                        />
+                      );
+                    }
+                  } else {
+                    return (
+                      <Cursor key={idx} activeKey={idx} children={chr} />
+                    );
+                  }
                 }
               }
-            }
-          })}
-        </code>
-      </pre>
+            })}
+          </code>
+        </pre>
+        <Restart handleRestart={this.handleRestart}/>
+      </div>
     )
   }
 }

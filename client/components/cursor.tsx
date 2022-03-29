@@ -9,35 +9,41 @@ type CursorProps = {
 const getDefinedStyle = (classType: string) => {
   if (classType === 'active') {
     return {
-      color: 'white',
+      color: '#ebdbb2',
       backgroundColor: 'green'
     }
   }
   else if (classType === 'done') {
-    return {}
+    return {color: '#ebdbb2'}
   } 
   else if (classType === 'incorrect') {
     return {
-      color: 'white',
-      backgroundColor: 'red'
+      color: '#ebdbb2',
+      backgroundColor: '#cc241d'
     }
   }
   else if (classType === 'active-arrow') {
-    return {color: 'red'}
+    return {color: '#cc241d'}
   }
   else if (classType === 'return') {
     return {
-      backgroundColor: '#fc5203',
+      backgroundColor: '#cc241d',
       paddingLeft: '7px',
       paddingRight: '3px',
       marginLeft: '3px',
-      color: 'white',
+      color: '#ebdbb2',
       fontSize: '14px'
     }
+  }
+  else return {
+    color: '#ebdbb2'
   }
 }
 
 function Cursor(props: CursorProps): JSX.Element {
+  React.useEffect(() => {
+    console.log(props.children)
+  }, [])
   if (props.class === undefined)
   return <span className={props.class} id={String(props.activeKey)}>
     {props.children}

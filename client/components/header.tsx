@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from "../styles/header.module.css";
+//import Image from 'next/image';
 
 function Header(): JSX.Element {
   return (
