@@ -1,0 +1,13 @@
+.mainHeading {
+  font-family: "Alice";
+  font-size: 35px;
+  color: #ebdbb2;
+}
+
+.subHeading {
+  font-family: "Roboto Mono";
+  color: #ebdbb2;
+  font-size: 13px;
+  margin-top: -35px;
+  margin-left: 53px;
+}
