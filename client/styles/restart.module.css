@@ -1,0 +1,13 @@
+.restart {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.restartbtn {
+  color: #665c54;
+}
+
+.restartbtn:hover {
+  color: #fabd2f;
+}

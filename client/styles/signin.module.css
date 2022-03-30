@@ -1,0 +1,40 @@
+.header {
+  font-family: Roboto Mono;
+  color: #ebdbb2;
+  font-size: 15px;
+}
+
+.inputHolder {
+  background: #212121;
+  padding: 9px;
+  border: none;
+  margin-top: 8px;
+  font-family: Roboto Mono;
+  color: #ebdbb2;
+}
+
+.inputHolder::placeholder {
+  font-family: Roboto Mono;
+  font-size: 14px;
+  color: #665c54;
+}
+
+.inputHolder:focus {
+  border: none;
+  outline: none;
+}
+
+.signInBtn {
+  margin-top: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  background: #212121;
+  font-family: Roboto Mono;
+  color: #ebdbb2;
+}
+
+.signInBtn:hover {
+  font-family: Roboto Mono;
+  color: #282828;
+  background: #ebdbb2;
+}

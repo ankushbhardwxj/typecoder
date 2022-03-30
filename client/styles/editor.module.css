@@ -1,0 +1,27 @@
+.code {
+  font-family: 'Fira Code';
+  font-size: 20px;
+  color: #665c54;
+}
+
+.editorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editorHeader {
+  display: flex;
+  justify-content: center;
+  margin-top: 144px;
+  font-family: 'Roboto Mono';
+  color: #665c54;
+}
+
+.editorHeader:hover {
+  display: flex;
+  justify-content: center;
+  margin-top: 144px;
+  font-family: 'Roboto Mono';
+  color: #ebdbb2;
+}
