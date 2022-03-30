@@ -2,6 +2,8 @@ import * as React from "react";
 import Cursor from "./cursor";
 import styles from "../styles/editor.module.css";
 import Restart from "./restart";
+import {Modal} from "@mui/material";
+import LessonList from "./lessonlist";
 
 type EditorProps = {
   code: string;
@@ -14,6 +16,7 @@ type EditorState = {
   size: number;
   code: string;
   title: string;
+  open: boolean;
   pause: boolean;
   delete: boolean;
   totalTyped: number;
@@ -39,6 +42,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       size: 0,
       code: this.props.code || "",
       title: "",
+      open: false,
       pause: false,
       delete: false,
       totalTyped: 0,
@@ -60,6 +64,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.handlePauseClick = this.handlePauseClick.bind(this);
     this.handleUnpauseClick = this.handleUnpauseClick.bind(this);
     this.handleRestart = this.handleRestart.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleKeyDown(e: KeyboardEvent) {
@@ -189,6 +195,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
     })
   }
 
+  handleOpen() {
+    this.setState({ open: true });
+  }
+
+  handleClose() {
+    this.setState({ open: false });
+  }
+
   componentDidMount() {
     this.setState({ size: this.props.code.length })
     document.addEventListener("keydown", this.handleKeyDown);
@@ -200,7 +214,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
   render() {
     return (
       <div>
-        <h3 className={styles.editorHeader}> {this.props.title} [{this.props.language}] </h3>
+        <p className={styles.editorHeader} onClick={this.handleOpen}> {this.props.title} [{this.props.language}] </p>
+        <Modal open={this.state.open} onClose={this.handleClose}>
+          <LessonList /> 
+        </Modal>
         <pre className={styles.editorContainer}>
           <code ref={this.codeRef} className={styles.code}>
             {[...this.state.code].map((chr, idx) => {

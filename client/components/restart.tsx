@@ -1,13 +1,14 @@
 import * as React from 'react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {IconButton, Tooltip} from '@mui/material';
+import styles from "../styles/restart.module.css";
 
 function Restart(props: {handleRestart: () => void}): JSX.Element {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '25px' }}>
+    <div className={styles.restart}>
       <Tooltip title="Restart Lesson">
-        <IconButton>
-          <RestartAltIcon onClick={props.handleRestart} sx={{color: '#fabd2f'}}/>
+        <IconButton onClick={props.handleRestart}>
+          <RestartAltIcon className={styles.restartbtn} />
         </IconButton>
       </Tooltip>
     </div>

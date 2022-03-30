@@ -1,0 +1,29 @@
+.lessonItem {
+  color: #665c54;
+  font-family: Roboto Mono;
+  font-size: 12px;
+  padding-left: 4px;
+  margin-left: -20px;
+  margin-right: -20px;
+  border: solid;
+  border-color: #282828;
+}
+
+.lessonItem:hover {
+  color: #282828;
+  background: #ebdbb2;
+  padding-left: 4px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.modalContainer {
+  border-radius: 1%;
+  margin-top: 130px;
+  max-height: 650px;
+  height: 650px;
+  max-width: 700px;
+  width: 700px;
+  background: #282828;
+  padding-top: 10px;
+}

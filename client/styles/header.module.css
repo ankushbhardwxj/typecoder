@@ -5,9 +5,18 @@
 }
 
 .subHeading {
-  font-family: "Roboto Mono";
   color: #ebdbb2;
   font-size: 13px;
   margin-top: -35px;
   margin-left: 53px;
 }
+
+.icon {
+  color: #665c54;
+  margin-top: 35px;
+}
+
+.icon:hover {
+  color: #ebdbb2;
+}
+
