@@ -3,13 +3,12 @@ import Box from '@mui/material/Box';
 import { Container } from '@mui/material';
 import styles from "../styles/lessonlist.module.css";
 
-function LessonList(): JSX.Element {
-  const [lessons, setLessons] = React.useState<string[]>([]);
+function LessonList({data, setCurrentLesson}: {data: any; setCurrentLesson: any}): JSX.Element {
   return (
     <Container maxWidth="md" className={styles.modalContainer}>
-      {lessons.map(item => (
-        <div className={styles.lessonItem}>
-          <p> {item} </p>
+      {data?.results.map((item: any, idx: number) => (
+        <div key={idx} className={styles.lessonItem}>
+          <p> {item.title} [{item.language}] </p>
         </div>
       ))}
     </Container>

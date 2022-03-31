@@ -9,6 +9,8 @@ type EditorProps = {
   code: string;
   title: string;
   language: string;
+  data: any;
+  setCurrentLesson: () => void;
 }
 
 type EditorState = {
@@ -40,7 +42,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.state = {
       idx: 0,
       size: 0,
-      code: this.props.code || "",
+      code: this.props.code,
       title: "",
       open: false,
       pause: false,
@@ -216,7 +218,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
       <div>
         <p className={styles.editorHeader} onClick={this.handleOpen}> {this.props.title} [{this.props.language}] </p>
         <Modal open={this.state.open} onClose={this.handleClose}>
-          <LessonList /> 
+          <LessonList
+            data={this.props.data}
+            setCurrentLesson={this.props.setCurrentLesson}
+          /> 
         </Modal>
         <pre className={styles.editorContainer}>
           <code ref={this.codeRef} className={styles.code}>
