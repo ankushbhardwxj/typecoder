@@ -1,13 +1,13 @@
-import * as React from "react";
-import Cursor from "./cursor";
-import styles from "../styles/editor.module.css";
-import Restart from "./restart";
-import {Modal, Container} from "@mui/material";
-//import LessonList from "./lessonlist";
+import * as React from 'react';
+import Cursor from './cursor';
+import styles from '../styles/editor.module.css';
+import Restart from './restart';
+import {Modal, Container} from '@mui/material';
+// import LessonList from "./lessonlist";
 import forge from 'node-forge';
-import stylesModal from "../styles/lessonlist.module.css";
-import Timer from "./timer";
-import GameOver from "./gameOver";
+import stylesModal from '../styles/lessonlist.module.css';
+import Timer from './timer';
+import GameOver from './gameOver';
 
 type EditorProps = {
   data: any;
@@ -38,28 +38,28 @@ type EditorState = {
 }
 
 class Editor extends React.Component<EditorProps, EditorState> {
-  codeRef: any
-  textInput: any
+  codeRef: any;
+  textInput: any;
   constructor(props: EditorProps) {
     super(props);
     this.state = {
       idx: 0,
       size: 0,
-      code: "",
-      title: "",
+      code: '',
+      title: '',
       open: false,
       pause: false,
       delete: false,
       totalTyped: 0,
-      username: "",
-      description: "",
-      language: "",
-      pressedKey: "",
-      timeString: "",
+      username: '',
+      description: '',
+      language: '',
+      pressedKey: '',
+      timeString: '',
       gameOver: false, // change this to false
       incorrect: false,
       incorrectSpanIdx: null,
-      incorrectLetters: "",
+      incorrectLetters: '',
       correctLetters: [],
       allIncorrect: [],
     };
@@ -75,7 +75,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   handleKeyDown(e: KeyboardEvent) {
-    let activeKey, ele;
+    let activeKey; let ele;
     if (!this.state.gameOver && this.state.idx != null) {
       activeKey = e.key;
       const element = document.getElementById(String(this.state.idx));
@@ -94,12 +94,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
     // GAME OVER: When cursor reaches last character
     if (this.state.idx >= this.state.size - 1 && !this.state.incorrect) {
-      this.setState({ gameOver: true });
+      this.setState({gameOver: true});
     }
 
     if (!this.state.gameOver) {
       // on hitting backspace move cursor back
-      if (activeKey == "Backspace") {
+      if (activeKey == 'Backspace') {
         if (this.state.idx > 0) {
           this.setState({
             idx: this.state.idx - 1,
@@ -108,15 +108,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
             delete: true,
           });
         }
-      } else if (activeKey != "Shift" && activeKey != "Tab") {
+      } else if (activeKey != 'Shift' && activeKey != 'Tab') {
         // on hitting anything else other than shift, move cursor forward
-        if (activeKey !== undefined)
-        this.setState({
-          idx: this.state.idx + 1,
-          pressedKey: activeKey,
-          totalTyped: this.state.totalTyped + 1,
-          delete: false,
-        });
+        if (activeKey !== undefined) {
+          this.setState({
+            idx: this.state.idx + 1,
+            pressedKey: activeKey,
+            totalTyped: this.state.totalTyped + 1,
+            delete: false,
+          });
+        }
       }
     }
     // if user hits backspace and comes back to wrong pos, make it right
@@ -129,53 +130,55 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.setState({
         incorrect: false,
         incorrectSpanIdx: null,
-        incorrectLetters: "",
+        incorrectLetters: '',
       });
     }
     // Correct and Incorrect Mechanism
     if (
-      activeKey != "Backspace" &&
-      activeKey != "Shift" &&
-      activeKey != "Enter" &&
-      activeKey != "Tab"
+      activeKey != 'Backspace' &&
+      activeKey != 'Shift' &&
+      activeKey != 'Enter' &&
+      activeKey != 'Tab'
     ) {
       // check for incorrect
       if (
         ele != activeKey &&
         !this.state.incorrect &&
         this.state.incorrectSpanIdx == null &&
-        this.state.incorrectLetters == ""
+        this.state.incorrectLetters == ''
       ) {
-        if (ele !== undefined && activeKey !== undefined)
-        this.setState({
-          incorrect: true,
-          incorrectSpanIdx: this.state.idx - 1,
-          incorrectLetters: activeKey,
-          allIncorrect: [...this.state.allIncorrect, ele],
-        });
+        if (ele !== undefined && activeKey !== undefined) {
+          this.setState({
+            incorrect: true,
+            incorrectSpanIdx: this.state.idx - 1,
+            incorrectLetters: activeKey,
+            allIncorrect: [...this.state.allIncorrect, ele],
+          });
+        }
       } else {
-        if (activeKey !== undefined)
-        this.setState({
-          correctLetters: [...this.state.correctLetters, activeKey],
-        });
+        if (activeKey !== undefined) {
+          this.setState({
+            correctLetters: [...this.state.correctLetters, activeKey],
+          });
+        }
       }
     }
   }
 
   handleClick() {
     this.codeRef?.current.focus();
-    this.codeRef?.current.addEventListener("keypress", this.handleKeyDown);
+    this.codeRef?.current.addEventListener('keypress', this.handleKeyDown);
   }
 
   handlePauseClick() {
     if (this.state.pause) {
-      this.setState({ pause: !this.state.pause });
+      this.setState({pause: !this.state.pause});
     }
   }
 
   handleUnpauseClick() {
     if (!this.state.pause) {
-      this.setState({ pause: !this.state.pause });
+      this.setState({pause: !this.state.pause});
     }
   }
 
@@ -183,54 +186,56 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.setState({
       idx: 0,
       size: 0,
-      code: "",
-      title: "",
+      code: '',
+      title: '',
       pause: false,
       delete: false,
       totalTyped: 0,
-      username: "",
-      description: "",
-      language: "",
-      pressedKey: "",
+      username: '',
+      description: '',
+      language: '',
+      pressedKey: '',
       gameOver: false, // change this to false
       incorrect: false,
       incorrectSpanIdx: null,
-      incorrectLetters: "",
+      incorrectLetters: '',
       correctLetters: [],
       allIncorrect: [],
-    })
+    });
   }
 
   handleOpen() {
-    this.setState({ open: true });
+    this.setState({open: true});
   }
 
   handleClose() {
-    this.setState({ open: false });
+    this.setState({open: false});
   }
 
   componentDidMount() {
-    let content = forge.util.decode64(this.props.activeLesson?.content || "");
-    this.setState({ 
-      size: content.length, 
-      code: content, 
+    const content = forge.util.decode64(this.props.activeLesson?.content || '');
+    this.setState({
+      size: content.length,
+      code: content,
       language: this.props.activeLesson.language,
-      title: this.props.activeLesson.title
+      title: this.props.activeLesson.title,
     });
-    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener('keydown', this.handleKeyDown);
     if (this.codeRef.current !== null)
-      // get rid of this
-      this.codeRef.current.addEventListener("click", this.handleClick);
+    // get rid of this
+    {
+      this.codeRef.current.addEventListener('click', this.handleClick);
+    }
   }
 
   componentDidUpdate() {
     if (this.state.title !== this.props.activeLesson.title) {
-      let content = forge.util.decode64(this.props.activeLesson?.content || "");
+      const content = forge.util.decode64(this.props.activeLesson?.content || '');
       window.localStorage.setItem('activeLesson', this.props.activeLesson?._id);
-      this.handleRestart(); 
-      this.setState({ 
-        size: content.length, 
-        code: content, 
+      this.handleRestart();
+      this.setState({
+        size: content.length,
+        code: content,
         language: this.props.activeLesson.language,
         title: this.props.activeLesson.title,
       });
@@ -241,28 +246,28 @@ class Editor extends React.Component<EditorProps, EditorState> {
   render() {
     return (
       <div style={{marginTop: '145px'}}>
-        {!this.state.gameOver && 
-        <Timer 
+        {!this.state.gameOver &&
+        <Timer
           gameOver={this.state.gameOver}
-          totalTyped={this.state.totalTyped} 
+          totalTyped={this.state.totalTyped}
           handleSetTimestring={(time: string) => {
-            this.setState({ timeString: time });
+            this.setState({timeString: time});
           }}
-          />}
-        {!this.state.gameOver && <p 
-          className={styles.editorHeader} 
+        />}
+        {!this.state.gameOver && <p
+          className={styles.editorHeader}
           onClick={this.handleOpen}
-        > 
-          {this.props.activeLesson.title} [{this.props.activeLesson.language}] 
+        >
+          {this.props.activeLesson.title} [{this.props.activeLesson.language}]
         </p>}
-        {!this.state.gameOver && 
+        {!this.state.gameOver &&
         <Modal open={this.state.open} onClose={this.handleClose}>
           <Container maxWidth="md" className={stylesModal.modalContainer}>
             {this.props.data?.results.map((item: any, idx: number) => (
-              <div key={idx} className={stylesModal.lessonItem} 
+              <div key={idx} className={stylesModal.lessonItem}
                 onClick={() => {
                   this.props.handleLessonClick(item);
-                  this.handleClose(item);
+                  this.handleClose();
                 }}>
                 <p> {item.title} [{item.language}] </p>
               </div>
@@ -282,7 +287,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
                     return (
                       <Cursor
                         key={idx}
-                        class={"return"}
+                        class={'return'}
                         activeKey={idx}
                         children={`↵ ${chr}`}
                       />
@@ -304,7 +309,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
                         key={idx}
                         class={`active-arrow`}
                         activeKey={idx}
-                        children={"<="}
+                        children={'<='}
                       />
                     );
                   }
@@ -323,18 +328,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
                           children={chr}
                         />
                       );
-                    } 
-                    else if (this.state.incorrect && idx >= this.state.incorrectSpanIdx) {
+                    } else if (this.state.incorrect && idx >= this.state.incorrectSpanIdx) {
                       return (
-                        <Cursor 
+                        <Cursor
                           key={idx}
                           class={`incorrect`}
                           activeKey={idx}
                           children={chr}
                         />
-                      )
-                    }
-                    else {
+                      );
+                    } else {
                       return (
                         <Cursor
                           key={idx}
@@ -354,20 +357,20 @@ class Editor extends React.Component<EditorProps, EditorState> {
             })}
           </code>
         </pre>}
-        {this.state.gameOver && 
+        {this.state.gameOver &&
         <GameOver
           timeString={this.state.timeString}
           title={this.props.activeLesson.title}
           typableLetters={this.state.size}
           language={this.props.activeLesson.language}
-          totalTyped={this.state.totalTyped} 
+          totalTyped={this.state.totalTyped}
           correctLetters={this.state.correctLetters}
           incorrectLetters={this.state.allIncorrect}
-          />
+        />
         }
         <Restart handleRestart={this.handleRestart}/>
       </div>
-    )
+    );
   }
 }
 

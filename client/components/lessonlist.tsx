@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Container } from '@mui/material';
-import styles from "../styles/lessonlist.module.css";
+import {Container} from '@mui/material';
+import styles from '../styles/lessonlist.module.css';
 
 function LessonList({data, setCurrentLesson}: {data: any; setCurrentLesson: any}): JSX.Element {
   return (
@@ -14,7 +14,7 @@ function LessonList({data, setCurrentLesson}: {data: any; setCurrentLesson: any}
         ))}
       </Container>
     </div>
-  )
+  );
 }
 
 export default LessonList;

@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 function Timer(props: any): JSX.Element {
-  const [seconds, updateSeconds] = React.useState<number> (0);
-  const [minutes, updateMinutes] = React.useState<number> (0);
-  const [timeString, updateTimeString] = React.useState<string> ('');
+  const [seconds, updateSeconds] = React.useState<number>(0);
+  const [minutes, updateMinutes] = React.useState<number>(0);
+  const [timeString, updateTimeString] = React.useState<string>('');
 
   React.useEffect(() => {
     let id;
@@ -26,14 +26,14 @@ function Timer(props: any): JSX.Element {
   React.useEffect(() => {
     return () => {
       props.handleSetTimestring(timeString);
-    }
-  }, [timeString])
+    };
+  }, [timeString]);
 
   const cDigits = (num: number) => {
-    let numString = String(num).length;
-    if(numString == 1) return '0'+num;
+    const numString = String(num).length;
+    if (numString == 1) return '0'+num;
     else return num;
-  }
+  };
 
   return (
     <h2 id="timeString" style={{textAlign: 'center', fontFamily: 'Roboto Mono', color: '#fabd2f'}}>

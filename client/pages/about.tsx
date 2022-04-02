@@ -1,5 +1,5 @@
-import * as React from "react";
-import type {NextPage} from 'next'
+import * as React from 'react';
+import type {NextPage} from 'next';
 
 const About: NextPage = () => {
   return (
@@ -10,12 +10,12 @@ const About: NextPage = () => {
         <br/> <br/>
         Therefore, the typing performance of a programmer can only be measured when they type "code" with speed and accuracy.
         <br/> <br />
-        On Typecoder, you can test yourself in a wide variety of "open source" code typing tests, across many popular languages. You can get detailed information about your typing speed and accuracy. Additionally, you can also compete with friends together in a session. 
+        On Typecoder, you can test yourself in a wide variety of "open source" code typing tests, across many popular languages. You can get detailed information about your typing speed and accuracy. Additionally, you can also compete with friends together in a session.
 
       </p>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default About;
 
