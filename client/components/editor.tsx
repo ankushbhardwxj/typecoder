@@ -205,7 +205,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.setState({ open: true });
   }
 
-  handleClose(item: any) {
+  handleClose() {
     this.setState({ open: false });
   }
 
@@ -226,6 +226,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   componentDidUpdate() {
     if (this.state.title !== this.props.activeLesson.title) {
       let content = forge.util.decode64(this.props.activeLesson?.content || "");
+      window.localStorage.setItem('activeLesson', this.props.activeLesson?._id);
       this.handleRestart(); 
       this.setState({ 
         size: content.length, 

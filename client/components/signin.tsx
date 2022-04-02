@@ -3,8 +3,10 @@ import * as React from 'react';
 import styles from "../styles/signin.module.css";
 import LoginIcon from '@mui/icons-material/Login';
 import GoogleIcon from '@mui/icons-material/Google';
+import {useRouter} from 'next/router';
 
 function SignIn(props: {toggleShowSignIn: any}): JSX.Element {
+  const router = useRouter();
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
@@ -32,6 +34,7 @@ function SignIn(props: {toggleShowSignIn: any}): JSX.Element {
       window.localStorage.setItem('username', username);
       // modify icon
       // add sign out option
+      router.reload();
     }
   }
 
