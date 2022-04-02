@@ -20,3 +20,30 @@
   color: #ebdbb2;
 }
 
+.userName {
+  color: #665c54;
+  margin-top: 44px;
+  margin-left: 10px;
+  font-family: Roboto Mono;
+  font-size: 12px;
+}
+
+.userName:hover {
+  color: #ebdbb2;
+}
+
+.signOutBtn {
+  margin-top: 41px;
+  margin-left: 55px;
+  padding-left: 50px;
+  padding-right: 50px;
+  font-family: Roboto Mono;
+  color: #665c54;
+}
+
+.signOutBtn:hover {
+  font-family: Roboto Mono;
+  color: #ebdbb2;
+  background: #212121;
+}
+
