@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
 )
@@ -34,11 +36,16 @@ func insertSignUpInfo(db *pg.DB, user User) {
 	}
 }
 
-func getUserInfo(db *pg.DB, email string) string {
+func getUserInfo(db *pg.DB, email string, column string) string {
 	var user User
-	err := db.Model(&user).Column("password").Where("email = ?", email).Select()
+	fmt.Println(column)
+	err := db.Model(&user).Column(column).Where("email = ?", email).Select()
+	fmt.Print(user)
 	if err != nil {
 		panic(err)
+	}
+	if column == "username" {
+		return user.Username
 	}
 	return user.Password
 }

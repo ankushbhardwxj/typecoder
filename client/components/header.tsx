@@ -30,13 +30,13 @@ function Header(): JSX.Element {
             <LeaderboardIcon className={styles.icon} />
           </IconButton>
           <IconButton>
-            <Link href="/login">
-              <PersonIcon className={styles.icon} />
+            <Link href="/about">
+              <InfoIcon className={styles.icon} />
             </Link>
           </IconButton>
           <IconButton>
-            <Link href="/about">
-              <InfoIcon className={styles.icon} />
+            <Link href="/login">
+              <PersonIcon className={styles.icon} />
             </Link>
           </IconButton>
         </nav>
