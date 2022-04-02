@@ -41,9 +41,6 @@ const getDefinedStyle = (classType: string) => {
 }
 
 function Cursor(props: CursorProps): JSX.Element {
-  React.useEffect(() => {
-    console.log(props.children)
-  }, [])
   if (props.class === undefined)
   return <span className={props.class} id={String(props.activeKey)}>
     {props.children}
