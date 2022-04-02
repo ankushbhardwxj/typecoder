@@ -4,3 +4,6 @@ build/
 yarn.lock
 .env
 
+
+# Local Netlify folder
+.netlify

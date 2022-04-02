@@ -8,10 +8,10 @@ function Leaderboard(): JSX.Element {
     let response: any = await fetch(url);
     response = await response.json();
     setLeaderboard(response?.result?.leaderboard);
-  }
+  };
 
   React.useEffect(() => {
-    const lessonId = window.localStorage.getItem("activeLesson");
+    const lessonId = window.localStorage.getItem('activeLesson');
     getLesson(lessonId);
   }, []);
 
@@ -20,10 +20,10 @@ function Leaderboard(): JSX.Element {
     <React.Fragment>
       <h2 style={{fontFamily: 'Roboto Mono', color: '#665c54'}}> LEADERBOARD </h2>
       <table style={{
-          fontFamily: 'Roboto Mono',
-          textAlign: 'left',
-          borderSpacing: '20px',
-          color: '#ebdbb2'
+        fontFamily: 'Roboto Mono',
+        textAlign: 'left',
+        borderSpacing: '20px',
+        color: '#ebdbb2',
       }}>
         <tr>
           <th> id </th>
@@ -33,7 +33,7 @@ function Leaderboard(): JSX.Element {
         </tr>
         {leaderboard.map((item: any, idx: number) => (
           <tr>
-            <td> {idx+1} </td> 
+            <td> {idx+1} </td>
             <td> {item.name} </td>
             <td> {item.wpm} </td>
             <td> {item.date} </td>

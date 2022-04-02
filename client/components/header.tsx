@@ -1,27 +1,27 @@
 import * as React from 'react';
-import styles from "../styles/header.module.css";
-//import Image from 'next/image';
+import styles from '../styles/header.module.css';
+// import Image from 'next/image';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
 import PersonIcon from '@mui/icons-material/Person';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import InfoIcon from '@mui/icons-material/Info';
 import {Grid, IconButton, Button} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import Link from "next/link";
+import Link from 'next/link';
 
 function Header(): JSX.Element {
-  const [userName, setUserName] = React.useState<string | null> ("");
+  const [userName, setUserName] = React.useState<string | null>('');
 
   const handleSignOut = () => {
     setUserName('');
     window.localStorage.removeItem('isSignedIn');
     window.localStorage.removeItem('username');
-  }
+  };
 
   React.useEffect(() => {
-    let isSignedIn = window.localStorage.getItem('isSignedIn');
-    let username = window.localStorage.getItem('username');
-    if (isSignedIn === "true") {
+    const isSignedIn = window.localStorage.getItem('isSignedIn');
+    const username = window.localStorage.getItem('username');
+    if (isSignedIn === 'true') {
       setUserName(username);
     }
   }, [userName]);
@@ -57,7 +57,7 @@ function Header(): JSX.Element {
             <Link href="/login">
               <PersonIcon className={styles.icon} />
             </Link>
-              {userName?.length !== undefined && userName?.length > 0 && 
+            {userName?.length !== undefined && userName?.length > 0 &&
               <p className={styles.userName}> {userName} </p>}
           </IconButton>
         </nav>

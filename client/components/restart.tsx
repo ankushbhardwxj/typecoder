@@ -1,7 +1,7 @@
 import * as React from 'react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {IconButton, Tooltip} from '@mui/material';
-import styles from "../styles/restart.module.css";
+import styles from '../styles/restart.module.css';
 
 function Restart(props: {handleRestart: () => void}): JSX.Element {
   return (
@@ -12,7 +12,7 @@ function Restart(props: {handleRestart: () => void}): JSX.Element {
         </IconButton>
       </Tooltip>
     </div>
-  )
+  );
 }
 
 export default Restart;
