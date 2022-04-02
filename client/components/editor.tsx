@@ -2,15 +2,17 @@ import * as React from "react";
 import Cursor from "./cursor";
 import styles from "../styles/editor.module.css";
 import Restart from "./restart";
-import {Modal} from "@mui/material";
-import LessonList from "./lessonlist";
+import {Modal, Container} from "@mui/material";
+//import LessonList from "./lessonlist";
+import forge from 'node-forge';
+import stylesModal from "../styles/lessonlist.module.css";
+import Timer from "./timer";
+import GameOver from "./gameOver";
 
 type EditorProps = {
-  code: string;
-  title: string;
-  language: string;
   data: any;
-  setCurrentLesson: () => void;
+  activeLesson: any;
+  handleLessonClick: any;
 }
 
 type EditorState = {
@@ -26,6 +28,7 @@ type EditorState = {
   description: string;
   language: string;
   pressedKey: string;
+  timeString: string;
   gameOver: boolean;
   incorrect: boolean;
   incorrectSpanIdx: any;
@@ -42,7 +45,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.state = {
       idx: 0,
       size: 0,
-      code: this.props.code,
+      code: "",
       title: "",
       open: false,
       pause: false,
@@ -52,6 +55,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       description: "",
       language: "",
       pressedKey: "",
+      timeString: "",
       gameOver: false, // change this to false
       incorrect: false,
       incorrectSpanIdx: null,
@@ -178,8 +182,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   handleRestart() {
     this.setState({
       idx: 0,
-      size: this.props.code.length,
-      code: this.props.code || "",
+      size: 0,
+      code: "",
       title: "",
       pause: false,
       delete: false,
@@ -201,29 +205,71 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.setState({ open: true });
   }
 
-  handleClose() {
+  handleClose(item: any) {
     this.setState({ open: false });
   }
 
   componentDidMount() {
-    this.setState({ size: this.props.code.length })
+    let content = forge.util.decode64(this.props.activeLesson?.content || "");
+    this.setState({ 
+      size: content.length, 
+      code: content, 
+      language: this.props.activeLesson.language,
+      title: this.props.activeLesson.title
+    });
     document.addEventListener("keydown", this.handleKeyDown);
     if (this.codeRef.current !== null)
       // get rid of this
       this.codeRef.current.addEventListener("click", this.handleClick);
   }
 
+  componentDidUpdate() {
+    if (this.state.title !== this.props.activeLesson.title) {
+      let content = forge.util.decode64(this.props.activeLesson?.content || "");
+      this.handleRestart(); 
+      this.setState({ 
+        size: content.length, 
+        code: content, 
+        language: this.props.activeLesson.language,
+        title: this.props.activeLesson.title,
+      });
+    }
+  }
+
+
   render() {
     return (
-      <div>
-        <p className={styles.editorHeader} onClick={this.handleOpen}> {this.props.title} [{this.props.language}] </p>
+      <div style={{marginTop: '145px'}}>
+        {!this.state.gameOver && 
+        <Timer 
+          gameOver={this.state.gameOver}
+          totalTyped={this.state.totalTyped} 
+          handleSetTimestring={(time: string) => {
+            this.setState({ timeString: time });
+          }}
+          />}
+        {!this.state.gameOver && <p 
+          className={styles.editorHeader} 
+          onClick={this.handleOpen}
+        > 
+          {this.props.activeLesson.title} [{this.props.activeLesson.language}] 
+        </p>}
+        {!this.state.gameOver && 
         <Modal open={this.state.open} onClose={this.handleClose}>
-          <LessonList
-            data={this.props.data}
-            setCurrentLesson={this.props.setCurrentLesson}
-          /> 
+          <Container maxWidth="md" className={stylesModal.modalContainer}>
+            {this.props.data?.results.map((item: any, idx: number) => (
+              <div key={idx} className={stylesModal.lessonItem} 
+                onClick={() => {
+                  this.props.handleLessonClick(item);
+                  this.handleClose(item);
+                }}>
+                <p> {item.title} [{item.language}] </p>
+              </div>
+            ))}
+          </Container>
         </Modal>
-        <pre className={styles.editorContainer}>
+        }
+        {!this.state.gameOver && <pre className={styles.editorContainer}>
           <code ref={this.codeRef} className={styles.code}>
             {[...this.state.code].map((chr, idx) => {
               // give certain classnames for different entities
@@ -306,7 +352,18 @@ class Editor extends React.Component<EditorProps, EditorState> {
               }
             })}
           </code>
-        </pre>
+        </pre>}
+        {this.state.gameOver && 
+        <GameOver
+          timeString={this.state.timeString}
+          title={this.props.activeLesson.title}
+          typableLetters={this.state.size}
+          language={this.props.activeLesson.language}
+          totalTyped={this.state.totalTyped} 
+          correctLetters={this.state.correctLetters}
+          incorrectLetters={this.state.allIncorrect}
+          />
+        }
         <Restart handleRestart={this.handleRestart}/>
       </div>
     )

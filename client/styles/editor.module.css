@@ -13,7 +13,6 @@
 .editorHeader {
   display: flex;
   justify-content: center;
-  margin-top: 144px;
   font-family: 'Roboto Mono';
   color: #665c54;
 }
@@ -21,7 +20,7 @@
 .editorHeader:hover {
   display: flex;
   justify-content: center;
-  margin-top: 144px;
   font-family: 'Roboto Mono';
   color: #ebdbb2;
+  cursor: default;
 }

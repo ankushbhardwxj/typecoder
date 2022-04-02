@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -46,13 +47,25 @@ func signInHandler(c *gin.Context) {
 		return
 	}
 	db := connectAndCreateSchema()
-	storedDigest := getUserInfo(db, json.Email)
+	storedDigest := getUserInfo(db, json.Email, "password")
 	digest := generateDigest(json.Email, json.Password)
 	if storedDigest != digest {
 		c.JSON(http.StatusForbidden, gin.H{"error": "User cannot be authorized"})
 	} else {
 		c.JSON(http.StatusOK, gin.H{"message": "User sign in successful"})
 	}
+}
+
+func getUserName(c *gin.Context) {
+	var json UserSignInData
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	db := connectAndCreateSchema()
+	userName := getUserInfo(db, json.Email, "username")
+	fmt.Print(userName)
+	c.JSON(http.StatusOK, gin.H{"userName": userName})
 }
 
 func sendOTPHandler(c *gin.Context) {
