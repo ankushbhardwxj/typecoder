@@ -19,6 +19,7 @@ Routes:
 */
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(cors.Default())
