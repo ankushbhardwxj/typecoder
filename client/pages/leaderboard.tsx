@@ -4,7 +4,7 @@ function Leaderboard(): JSX.Element {
   const [leaderboard, setLeaderboard] = React.useState<any>([]);
 
   const getLesson = async (id: any) => {
-    const url = `http://localhost:8000/api/v1/lesson/${id}`;
+    const url = `https://mighty-eyrie-60612.herokuapp.com/api/v1/lesson/${id}`;
     let response: any = await fetch(url);
     response = await response.json();
     setLeaderboard(response?.result?.leaderboard);

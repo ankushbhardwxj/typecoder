@@ -11,7 +11,7 @@ function SignIn(props: {toggleShowSignIn: any}): JSX.Element {
   const [password, setPassword] = React.useState<string>('');
 
   const getUsername = async () => {
-    const url = 'http://localhost:8001/api/v1/getUsername';
+    const url = 'https://tranquil-shore-88871.herokuapp.com/api/v1/getUsername';
     const body = JSON.stringify({Email: email});
     let response: any = await fetch(url, {method: 'POST', body: body});
     response = await response.json();
@@ -20,7 +20,7 @@ function SignIn(props: {toggleShowSignIn: any}): JSX.Element {
   };
 
   const handleSignIn = async () => {
-    const url = `http://localhost:8001/api/v1/signin`;
+    const url = `https://tranquil-shore-88871.herokuapp.com/api/v1/signin`;
     const body = JSON.stringify({Email: email, Password: password});
     const response = await fetch(url, {
       method: 'POST',
