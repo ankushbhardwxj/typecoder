@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,7 @@ Routes:
 */
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(cors.Default())
@@ -35,5 +37,5 @@ func main() {
 		// v1.GET("/googleOAuth", hello)
 		// v1.GET("/googleOAuth/redirect", hello)
 	}
-	r.Run(":8001")
+	r.Run(":" + os.Getenv("PORT"))
 }
