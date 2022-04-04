@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -45,6 +46,7 @@ func GetCollection(client *mongo.Client, collectionName string) *mongo.Collectio
 }
 
 var userCollection *mongo.Collection = GetCollection(DB, "users")
+var validate = validator.New()
 
 func insertUserToDB(schemaObject User) *mongo.InsertOneResult {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
@@ -66,4 +68,24 @@ func getUserInfo(email string, key string) string {
 		return user.Username
 	}
 	return user.Password
+}
+
+func checkUserInDB(userName string) bool {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	var user User
+	err := userCollection.FindOne(ctx, bson.M{"username": userName}).Decode(&user)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func checkEmailInDB(email string) bool {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	var user User
+	err := userCollection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
+	if err != nil {
+		return false
+	}
+	return true
 }

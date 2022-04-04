@@ -29,6 +29,16 @@ func signUpHandler(c *gin.Context) {
 	schemaObject.Email = json.Email
 	schemaObject.Password = generateDigest(json.Email, json.Password)
 	schemaObject.Username = json.UserName
+	if validationErr := validate.Struct(&schemaObject); validationErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
+		return
+	}
+	checkUserNameFound := checkUserInDB(schemaObject.Username)
+	checkEmailFound := checkEmailInDB(schemaObject.Email)
+	if checkUserNameFound == true || checkEmailFound == true {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user already registered"})
+		return
+	}
 	result := insertUserToDB(schemaObject)
 	c.JSON(http.StatusOK, gin.H{
 		"result": result,
@@ -59,6 +69,21 @@ func getUserName(c *gin.Context) {
 	}
 	userName := getUserInfo(json.Email, "Username")
 	c.JSON(http.StatusOK, gin.H{"UserName": userName})
+}
+
+func checkUsernameTaken(c *gin.Context) {
+	var json UserSignUpData
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	userName := json.UserName
+	found := checkUserInDB(userName)
+	if found == true {
+		c.JSON(http.StatusOK, gin.H{"Found": found})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "username not found"})
+	}
 }
 
 func sendOTPHandler(c *gin.Context) {

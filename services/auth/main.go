@@ -1,6 +1,8 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -23,10 +25,13 @@ func main() {
 	connectDB()
 	v1 := r.Group("/api/v1")
 	{
+		v1.GET("/ping", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{"message": "hello"})
+		})
 		v1.POST("/signin", signInHandler)
 		v1.POST("/signup", signUpHandler)
 		v1.POST("/getUsername", getUserName)
-		//v1.POST("/checkUsernameTaken", checkUsernameTaken)
+		v1.POST("/checkUsernameTaken", checkUsernameTaken)
 		// v1.GET("/googleOAuth", hello)
 		// v1.GET("/googleOAuth/redirect", hello)
 	}
