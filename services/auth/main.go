@@ -20,6 +20,7 @@ func main() {
 	r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(cors.Default())
+	connectDB()
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/signin", signInHandler)

@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,16 +25,13 @@ func signUpHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	db := connectAndCreateSchema()
 	var schemaObject User
 	schemaObject.Email = json.Email
 	schemaObject.Password = generateDigest(json.Email, json.Password)
 	schemaObject.Username = json.UserName
-	insertSignUpInfo(db, schemaObject)
+	result := insertUserToDB(schemaObject)
 	c.JSON(http.StatusOK, gin.H{
-		"email":    json.Email,
-		"username": json.UserName,
-		"password": json.Password,
+		"result": result,
 	})
 	return
 }
@@ -46,8 +42,7 @@ func signInHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	db := connectAndCreateSchema()
-	storedDigest := getUserInfo(db, json.Email, "password")
+	storedDigest := getUserInfo(json.Email, "Password")
 	digest := generateDigest(json.Email, json.Password)
 	if storedDigest != digest {
 		c.JSON(http.StatusForbidden, gin.H{"error": "User cannot be authorized"})
@@ -62,10 +57,8 @@ func getUserName(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	db := connectAndCreateSchema()
-	userName := getUserInfo(db, json.Email, "username")
-	fmt.Print(userName)
-	c.JSON(http.StatusOK, gin.H{"userName": userName})
+	userName := getUserInfo(json.Email, "Username")
+	c.JSON(http.StatusOK, gin.H{"UserName": userName})
 }
 
 func sendOTPHandler(c *gin.Context) {

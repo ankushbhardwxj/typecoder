@@ -1,50 +1,68 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"log"
+	"time"
 
-	"github.com/go-pg/pg/v10"
-	"github.com/go-pg/pg/v10/orm"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 /* Schema */
 type User struct {
-	Id       int64  `pg:"id,pk"`
-	Username string `pg:",unique,notnull"`
-	Email    string `pg:",notnull"`
-	Password string `pg:",notnull"`
+	Id       primitive.ObjectID `json:"_id,omitempty"`
+	Username string             `json:"username,omitempty" validate:"required"`
+	Email    string             `json:"email,omitempty" validate:"required"`
+	Password string             `json:"password,omitempty" validate:"required"`
 }
 
-func connectAndCreateSchema() *pg.DB {
-	db := pg.Connect(&pg.Options{User: "ankush", Database: "typecoder", Password: "iamnotankush"})
-	//defer db.Close()
-	// check if table is already present
-	models := []interface{}{(*User)(nil)}
-	for _, model := range models {
-		err := db.Model(model).CreateTable(&orm.CreateTableOptions{IfNotExists: true})
-		if err != nil {
-			panic(err)
-		}
+func connectDB() *mongo.Client {
+	client, err := mongo.NewClient(options.Client().ApplyURI(getMongoURI()))
+	if err != nil {
+		log.Fatal(err)
 	}
-	return db
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	err = client.Connect(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return client
 }
 
-func insertSignUpInfo(db *pg.DB, user User) {
-	_, err := db.Model(&user).Insert()
+var DB *mongo.Client = connectDB()
+
+func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
+	collection := client.Database("typecoder-typing-service").Collection(collectionName)
+	return collection
+}
+
+var userCollection *mongo.Collection = GetCollection(DB, "users")
+
+func insertUserToDB(schemaObject User) *mongo.InsertOneResult {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	result, err := userCollection.InsertOne(ctx, schemaObject)
 	if err != nil {
 		panic(err)
 	}
+	return result
 }
 
-func getUserInfo(db *pg.DB, email string, column string) string {
+func getUserInfo(email string, key string) string {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	var user User
-	fmt.Println(column)
-	err := db.Model(&user).Column(column).Where("email = ?", email).Select()
-	fmt.Print(user)
+	err := userCollection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
 	if err != nil {
 		panic(err)
 	}
-	if column == "username" {
+	if key == "Username" {
 		return user.Username
 	}
 	return user.Password

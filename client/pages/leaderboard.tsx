@@ -32,7 +32,7 @@ function Leaderboard(): JSX.Element {
           <th> date </th>
         </tr>
         {leaderboard.map((item: any, idx: number) => (
-          <tr>
+          <tr key={idx}>
             <td> {idx+1} </td>
             <td> {item.name} </td>
             <td> {item.wpm} </td>
