@@ -8,12 +8,39 @@ function GameOver(props: any): JSX.Element {
     else return ((60 * minutes) + seconds) / 60;
   };
 
+  const addToLeaderboard = async (wpm: any) => {
+    try {
+      // lesson id, usernmae
+      const lessonId = props.lessonId;
+      const username = window.localStorage.getItem("username");
+      console.log(username, wpm);
+      if (username !== null) {
+        let body = JSON.stringify({
+          username: username,
+          wpm: wpm
+        });
+        console.log(body);
+        let url = `http://localhost:8000/api/v1/lesson/leaderboard/${lessonId}`;
+        let response = await fetch(url, {
+          method: "PATCH",
+          headers: { 'Content-Type':'application/json' },
+          body: body
+        });
+        let responseJSON = await response.json();
+        console.log(responseJSON);
+      }
+    } catch (err) {
+      console.log("Failed to fetch");
+    }
+  }
+
   const calculateWPM = () => {
     const time = props.timeString;
     if (time !== undefined) {
       const [minutes, seconds]: any = time?.split(':');
       const testDurationInMinutes: number = timeDurationToFloatNumber(parseInt(minutes), parseInt(seconds));
       const wpm = (props.correctLetters.length / 5) * (1 / testDurationInMinutes);
+      addToLeaderboard(wpm.toFixed(2));
       return wpm.toFixed(2);
     }
   };
@@ -30,6 +57,13 @@ function GameOver(props: any): JSX.Element {
   const calculateUnproductiveKeystrokes = () => {
     return getPercent(props.incorrectLetters.length, props.totalTyped);
   };
+
+  // React.useEffect(() => {
+  //   return () => {
+  //     const wpm = calculateWPM();
+  //     addToLeaderboard(wpm);
+  //   }
+  // }, []);
 
   return (
     <div className={styles.container}>

@@ -34,6 +34,7 @@ db.once("open", () => console.log("Successfully connected to DB"));
  * - delete a lesson: /api/v1/lesson/id
  * - get a lesson: /api/v1/lesson/id
  * - add user to leaderboard: /api/v1/lesson/leaderboard/
+ * - update user in leaderboard: /api/v1/lesson/leaderboard/:lessonId
  * - return leaderboard of a lesson: /api/v1/lesson/leaderboard
  * - get userInfo from leaderboard: /api/v1/lesson/leaderboard/id
  */

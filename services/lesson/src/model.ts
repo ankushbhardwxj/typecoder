@@ -13,16 +13,16 @@ const lessonSchema = new mongoose.Schema({
       date: { type: Date, default: Date.now }
     }
   ],
-  userPerformance: [
-    {
-      wpm: { type: Number },
-      date: { type: Date, default: Date.now },
-      totalTypedCharacters: { type: String },
-      correctlyTypedCharacters: { type: String }, 
-      unproductiveKeystrokes: { type: String },
-      elapsedTime: { type: String }
-    }
-  ]
+  // userPerformance: [
+  //   {
+  //     wpm: { type: Number },
+  //     date: { type: Date, default: Date.now },
+  //     totalTypedCharacters: { type: String },
+  //     correctlyTypedCharacters: { type: String }, 
+  //     unproductiveKeystrokes: { type: String },
+  //     elapsedTime: { type: String }
+  //   }
+  // ]
 });
 
 export default mongoose.model('Lesson', lessonSchema);

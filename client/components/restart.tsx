@@ -7,9 +7,7 @@ function Restart(props: {handleRestart: () => void}): JSX.Element {
   return (
     <div className={styles.restart}>
       <Tooltip title="Restart Lesson">
-        <IconButton onClick={props.handleRestart}>
-          <RestartAltIcon className={styles.restartbtn} />
-        </IconButton>
+        <RestartAltIcon onClick={props.handleRestart} className={styles.restartbtn} />
       </Tooltip>
     </div>
   );

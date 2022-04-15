@@ -183,6 +183,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   handleRestart() {
+    const username = window.localStorage.getItem('username') || "";
     this.setState({
       idx: 0,
       size: 0,
@@ -191,7 +192,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       pause: false,
       delete: false,
       totalTyped: 0,
-      username: '',
+      username: username,
       description: '',
       language: '',
       pressedKey: '',
@@ -214,11 +215,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   componentDidMount() {
     const content = forge.util.decode64(this.props.activeLesson?.content || '');
+    const username = window.localStorage.getItem('username') || "";
     this.setState({
       size: content.length,
       code: content,
       language: this.props.activeLesson.language,
       title: this.props.activeLesson.title,
+      username: username
     });
     document.addEventListener('keydown', this.handleKeyDown);
     if (this.codeRef.current !== null)
@@ -359,6 +362,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
         </pre>}
         {this.state.gameOver &&
         <GameOver
+          lessonId={this.props.activeLesson._id}
           timeString={this.state.timeString}
           title={this.props.activeLesson.title}
           typableLetters={this.state.size}
