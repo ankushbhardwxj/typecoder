@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Editor from '../components/editor';
+import "../styles/header.module.css";
 
 function Home({data}: {data: any}) {
   const [activeLesson, setActiveLesson] = React.useState<object>({});

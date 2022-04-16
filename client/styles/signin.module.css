@@ -28,13 +28,13 @@
   margin-top: 10px;
   padding-left: 50px;
   padding-right: 50px;
-  background: #212121;
   font-family: Roboto Mono;
   color: #ebdbb2;
+  background-color: #212121;
 }
 
 .signInBtn:hover {
   font-family: Roboto Mono;
   color: #282828;
-  background: #ebdbb2;
+  background-color: #ebdbb2;
 }

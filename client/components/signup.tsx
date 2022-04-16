@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from '../styles/signin.module.css';
+import "../styles/signin.module.css";
 import {Button} from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {useRouter} from 'next/router';
@@ -94,7 +95,16 @@ function SignUp(props: { toggleShowSignIn: any }): JSX.Element {
       </div>
       {showPasswordMismatch && <div> <p style={{color: 'darkred'}}> Passwords dont match ! </p> </div>}
       {failedRegister && <div> <p style={{color: 'darkred'}}> User registration failed ! </p> </div>}
-      <Button onClick={handleSignUp} className={styles.signInBtn} variant="contained" startIcon={<PersonAddIcon />}>
+      <Button
+        style={{
+            marginTop: '10px',
+            paddingLeft: '50px',
+            paddingRight: '50px',
+            fontFamily: 'Roboto Mono',
+            color: '#ebdbb2',
+            background: '#212121'
+        }}
+        onClick={handleSignUp} className={styles.signInBtn} variant="contained" startIcon={<PersonAddIcon />}>
         Sign Up
       </Button>
       <p className={styles.header}> Already have an account ? <br/>

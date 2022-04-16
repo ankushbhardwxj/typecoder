@@ -20,7 +20,7 @@ function GameOver(props: any): JSX.Element {
           wpm: wpm
         });
         console.log(body);
-        let url = `http://localhost:8000/api/v1/lesson/leaderboard/${lessonId}`;
+        let url = `https://mighty-eyrie-60612.herokuapp.com/api/v1/lesson/leaderboard/${lessonId}`;
         let response = await fetch(url, {
           method: "PATCH",
           headers: { 'Content-Type':'application/json' },
