@@ -1,7 +1,6 @@
 import lessonSchema from "./model";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
-import forge from 'node-forge';
 
 export async function getAllLessons(req: Request, res: Response) {
   try {
@@ -68,13 +67,56 @@ export async function addUserToLeaderboard(req: Request, res: Response) {
     res.status(200).json({ result: updateLeaderboard });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to get lesson" });
+    res.status(500).json({ error: "Failed to add user to leaderboard" });
   }
 }
 
-export async function getUserPositionFromLeaderboard(req: Request, res: Response) {
+export async function updateUserDataInLeaderboard(req: Request, res: Response) {
   try {
-    throw Error("NOT FOUND");
+    const username = req.body.username;
+    const wpm = req.body.wpm;
+    if (username !== undefined && wpm !== undefined) {
+      const lessonId = req.params.id;
+      const lesson = await lessonSchema.findOne({_id: lessonId});
+      const leaderboard = lesson.leaderboard; 
+      let found = false;
+      for (let i=0; i<leaderboard.length; i++) {
+        if (leaderboard[i].name === username) {
+          if (wpm > leaderboard[i].wpm)
+            leaderboard[i].wpm = wpm;
+          found = true;
+        }
+      }
+      if (!found) {
+        const user = { name: req.body.username, wpm: req.body.wpm };
+        await lessonSchema.updateOne(
+          { _id: lessonId }, {$push: { leaderboard: { 
+            $each: [user],
+            $sort: { wpm: -1 }
+          }}}
+        );
+      }
+      else await lesson.save();
+      res.status(200).json({ result: "Success updating leaderboard"});
+    } else throw new Error("Invalid request payload");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update leaderboard" });
+  }
+}
+
+export async function checkUserInLeaderboard(req: Request, res: Response) {
+  try {
+    const lessonId = req.params.id;
+    const results = await lessonSchema
+      .findOne({ _id: lessonId })
+      .sort({ 'wpm': 1 });
+    const leaderboard = results.leaderboard;
+    const username = req.body.username;
+    for (let i=0; i<leaderboard.length; i++) {
+      if (leaderboard[i].name === username) res.status(200).json({result: true});
+    }
+    res.status(200).json({result: false});
   } catch (err) {
     res.status(500).json({ error: "Failed to get lesson" });
   }
@@ -89,6 +131,19 @@ export async function getLeaderboardByLesson(req: Request, res: Response) {
     res.status(200).json({ result: results.leaderboard });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to get lesson" });
+    res.status(500).json({ error: "Failed to get leaderboard of lesson" });
+  }
+}
+
+export async function deleteLeaderboard(req: Request, res: Response) {
+  try {
+    const lessonId = req.params.id;
+    const lesson = await lessonSchema.findOne({_id: lessonId});
+    lesson.leaderboard = [];
+    await lesson.save();
+    res.status(200).json({ result: "Success reseting leaderboard"});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to reset leaderboard of lesson" });
   }
 }

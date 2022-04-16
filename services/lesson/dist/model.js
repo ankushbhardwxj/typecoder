@@ -17,16 +17,6 @@ const lessonSchema = new mongoose_1.default.Schema({
             date: { type: Date, default: Date.now }
         }
     ],
-    userPerformance: [
-        {
-            wpm: { type: Number },
-            date: { type: Date, default: Date.now },
-            totalTypedCharacters: { type: String },
-            correctlyTypedCharacters: { type: String },
-            unproductiveKeystrokes: { type: String },
-            elapsedTime: { type: String }
-        }
-    ]
 });
 exports.default = mongoose_1.default.model('Lesson', lessonSchema);
 //# sourceMappingURL=model.js.map

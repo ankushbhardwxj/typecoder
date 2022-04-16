@@ -12,6 +12,7 @@ router.delete("/lesson/:id", controllers_1.deleteLessonById);
 router.get("/lesson/:id", controllers_1.getLessonById);
 router.get("/lesson/leaderboard/:id", controllers_1.getLeaderboardByLesson);
 router.post("/lesson/leaderboard/:id", controllers_1.addUserToLeaderboard);
-router.get("/lesson/leaderboard/:id/:username", controllers_1.getUserPositionFromLeaderboard);
+router.patch("/lesson/leaderboard/:id", controllers_1.updateUserDataInLeaderboard);
+router.patch("/lesson/leaderboard/:id/reset", controllers_1.deleteLeaderboard);
 exports.default = router;
 //# sourceMappingURL=routes.js.map

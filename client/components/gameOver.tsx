@@ -3,19 +3,45 @@ import * as React from 'react';
 import styles from '../styles/gameOver.module.css';
 
 function GameOver(props: any): JSX.Element {
+  const [_wpm, setWPM] = React.useState<string>("");
   const timeDurationToFloatNumber = (minutes: number, seconds: number): number => {
     if (minutes === 0) return seconds / 60;
     else return ((60 * minutes) + seconds) / 60;
   };
 
-  const calculateWPM = () => {
+  const addToLeaderboard = async (wpm: any) => {
+    try {
+      // lesson id, usernmae
+      const lessonId = props.lessonId;
+      const username = window.localStorage.getItem("username");
+      if (username !== null) {
+        let body = JSON.stringify({
+          username: username,
+          wpm: wpm
+        });
+        console.log(body);
+        let url = `https://mighty-eyrie-60612.herokuapp.com/api/v1/lesson/leaderboard/${lessonId}`;
+        let response = await fetch(url, {
+          method: "PATCH",
+          headers: { 'Content-Type':'application/json' },
+          body: body
+        });
+        let responseJSON = await response.json();
+        console.log(responseJSON);
+      }
+    } catch (err) {
+      console.log("Failed to fetch");
+    }
+  }
+
+  const calculateWPM = (): string => {
     const time = props.timeString;
     if (time !== undefined) {
       const [minutes, seconds]: any = time?.split(':');
       const testDurationInMinutes: number = timeDurationToFloatNumber(parseInt(minutes), parseInt(seconds));
       const wpm = (props.correctLetters.length / 5) * (1 / testDurationInMinutes);
       return wpm.toFixed(2);
-    }
+    } else return "";
   };
 
   const getPercent = (value: number, total: number) => {
@@ -31,6 +57,12 @@ function GameOver(props: any): JSX.Element {
     return getPercent(props.incorrectLetters.length, props.totalTyped);
   };
 
+  React.useEffect(() => {
+    const WPM: string = calculateWPM();
+    addToLeaderboard(WPM);
+    setWPM(WPM);
+  }, []);
+
   return (
     <div className={styles.container}>
       <Grid container spacing={8}>
@@ -38,7 +70,7 @@ function GameOver(props: any): JSX.Element {
           <p className={styles.header}> lesson </p>
           <p className={styles.value}> {props.title}</p>
           <p className={styles.header}> wpm </p>
-          <p className={styles.value}> {calculateWPM()}</p>
+          <p className={styles.value}> {_wpm}</p>
           <p className={styles.header}> accuracy </p>
           <p className={styles.value}> {calculateAccuracy()}% </p>
         </Grid>

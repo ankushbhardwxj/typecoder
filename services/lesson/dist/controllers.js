@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLeaderboardByLesson = exports.getUserPositionFromLeaderboard = exports.addUserToLeaderboard = exports.getLessonById = exports.deleteLessonById = exports.addLesson = exports.getAllLessons = void 0;
+exports.deleteLeaderboard = exports.getLeaderboardByLesson = exports.checkUserInLeaderboard = exports.updateUserDataInLeaderboard = exports.addUserToLeaderboard = exports.getLessonById = exports.deleteLessonById = exports.addLesson = exports.getAllLessons = void 0;
 const model_1 = __importDefault(require("./model"));
 const mongoose_1 = __importDefault(require("mongoose"));
 async function getAllLessons(req, res) {
@@ -74,19 +74,65 @@ async function addUserToLeaderboard(req, res) {
     }
     catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Failed to get lesson" });
+        res.status(500).json({ error: "Failed to add user to leaderboard" });
     }
 }
 exports.addUserToLeaderboard = addUserToLeaderboard;
-async function getUserPositionFromLeaderboard(req, res) {
+async function updateUserDataInLeaderboard(req, res) {
     try {
-        throw Error("NOT FOUND");
+        const username = req.body.username;
+        const wpm = req.body.wpm;
+        if (username !== undefined && wpm !== undefined) {
+            const lessonId = req.params.id;
+            const lesson = await model_1.default.findOne({ _id: lessonId });
+            const leaderboard = lesson.leaderboard;
+            let found = false;
+            for (let i = 0; i < leaderboard.length; i++) {
+                if (leaderboard[i].name === username) {
+                    if (wpm > leaderboard[i].wpm)
+                        leaderboard[i].wpm = wpm;
+                    found = true;
+                }
+            }
+            if (!found) {
+                const user = { name: req.body.username, wpm: req.body.wpm };
+                await model_1.default.updateOne({ _id: lessonId }, { $push: { leaderboard: {
+                            $each: [user],
+                            $sort: { wpm: -1 }
+                        } } });
+            }
+            else
+                await lesson.save();
+            res.status(200).json({ result: "Success updating leaderboard" });
+        }
+        else
+            throw new Error("Invalid request payload");
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to update leaderboard" });
+    }
+}
+exports.updateUserDataInLeaderboard = updateUserDataInLeaderboard;
+async function checkUserInLeaderboard(req, res) {
+    try {
+        const lessonId = req.params.id;
+        const results = await model_1.default
+            .findOne({ _id: lessonId })
+            .sort({ 'wpm': 1 });
+        const leaderboard = results.leaderboard;
+        const username = req.body.username;
+        for (let i = 0; i < leaderboard.length; i++) {
+            if (leaderboard[i].name === username)
+                res.status(200).json({ result: true });
+        }
+        res.status(200).json({ result: false });
     }
     catch (err) {
         res.status(500).json({ error: "Failed to get lesson" });
     }
 }
-exports.getUserPositionFromLeaderboard = getUserPositionFromLeaderboard;
+exports.checkUserInLeaderboard = checkUserInLeaderboard;
 async function getLeaderboardByLesson(req, res) {
     try {
         const lessonId = req.params.id;
@@ -97,8 +143,22 @@ async function getLeaderboardByLesson(req, res) {
     }
     catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Failed to get lesson" });
+        res.status(500).json({ error: "Failed to get leaderboard of lesson" });
     }
 }
 exports.getLeaderboardByLesson = getLeaderboardByLesson;
+async function deleteLeaderboard(req, res) {
+    try {
+        const lessonId = req.params.id;
+        const lesson = await model_1.default.findOne({ _id: lessonId });
+        lesson.leaderboard = [];
+        await lesson.save();
+        res.status(200).json({ result: "Success reseting leaderboard" });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to reset leaderboard of lesson" });
+    }
+}
+exports.deleteLeaderboard = deleteLeaderboard;
 //# sourceMappingURL=controllers.js.map

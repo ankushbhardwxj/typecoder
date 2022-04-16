@@ -1,19 +1,19 @@
 .container {
-  margin-top: 144px;
+  margin-top: -150px;
   margin-left: 50px;
 }
 
 .header {
   font-family: Roboto Mono;
-  font-size: 35px;
+  font-size: 30px;
   color: #665c54;
 }
 
 .value {
   font-family: Roboto Mono;
-  font-size: 45px;
+  font-size: 33px;
   color: #fabd2f;
-  margin-top: -40px;
+  margin-top: -30px;
 }
 
 .value2 {

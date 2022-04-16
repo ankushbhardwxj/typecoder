@@ -1,5 +1,5 @@
 import express from "express";
-import {addLesson, deleteLessonById, getAllLessons, getLessonById, getLeaderboardByLesson, addUserToLeaderboard, getUserPositionFromLeaderboard} from "./controllers";
+import {addLesson, deleteLessonById, getAllLessons, getLessonById, getLeaderboardByLesson, addUserToLeaderboard, updateUserDataInLeaderboard, deleteLeaderboard} from "./controllers";
 
 const router = express.Router();
 
@@ -9,6 +9,7 @@ router.delete("/lesson/:id", deleteLessonById);
 router.get("/lesson/:id", getLessonById);
 router.get("/lesson/leaderboard/:id", getLeaderboardByLesson);
 router.post("/lesson/leaderboard/:id", addUserToLeaderboard);
-router.get("/lesson/leaderboard/:id/:username", getUserPositionFromLeaderboard);
+router.patch("/lesson/leaderboard/:id", updateUserDataInLeaderboard);
+router.patch("/lesson/leaderboard/:id/reset", deleteLeaderboard);
 
 export default router;

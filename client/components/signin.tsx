@@ -1,8 +1,8 @@
 import {Button} from '@mui/material';
 import * as React from 'react';
 import styles from '../styles/signin.module.css';
+import "../styles/signin.module.css";
 import LoginIcon from '@mui/icons-material/Login';
-import GoogleIcon from '@mui/icons-material/Google';
 import {useRouter} from 'next/router';
 
 function SignIn(props: {toggleShowSignIn: any}): JSX.Element {
@@ -16,7 +16,7 @@ function SignIn(props: {toggleShowSignIn: any}): JSX.Element {
     let response: any = await fetch(url, {method: 'POST', body: body});
     response = await response.json();
     console.log(response);
-    return response.userName;
+    return response.UserName;
   };
 
   const handleSignIn = async () => {
@@ -57,6 +57,14 @@ function SignIn(props: {toggleShowSignIn: any}): JSX.Element {
         />
       </div>
       <Button
+        style={{
+            marginTop: '10px',
+            paddingLeft: '50px',
+            paddingRight: '50px',
+            fontFamily: 'Roboto Mono',
+            color: '#ebdbb2',
+            background: '#212121'
+        }}
         className={styles.signInBtn}
         onClick={handleSignIn}
         variant="contained"
