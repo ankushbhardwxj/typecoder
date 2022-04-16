@@ -1,7 +1,6 @@
 import lessonSchema from "./model";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
-import forge from 'node-forge';
 
 export async function getAllLessons(req: Request, res: Response) {
   try {

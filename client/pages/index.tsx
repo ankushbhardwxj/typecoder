@@ -23,7 +23,13 @@ function Home({data}: {data: any}) {
   );
 }
 
-export async function getServerSideProps() {
+// export async function getServerSideProps() {
+//   const response = await fetch(`https://mighty-eyrie-60612.herokuapp.com/api/v1/lesson`);
+//   const data = await response.json();
+//   return {props: {data}};
+// }
+
+export async function getStaticProps() {
   const response = await fetch(`https://mighty-eyrie-60612.herokuapp.com/api/v1/lesson`);
   const data = await response.json();
   return {props: {data}};

@@ -3,6 +3,7 @@ import * as React from 'react';
 import styles from '../styles/gameOver.module.css';
 
 function GameOver(props: any): JSX.Element {
+  const [_wpm, setWPM] = React.useState<string>("");
   const timeDurationToFloatNumber = (minutes: number, seconds: number): number => {
     if (minutes === 0) return seconds / 60;
     else return ((60 * minutes) + seconds) / 60;
@@ -13,7 +14,6 @@ function GameOver(props: any): JSX.Element {
       // lesson id, usernmae
       const lessonId = props.lessonId;
       const username = window.localStorage.getItem("username");
-      console.log(username, wpm);
       if (username !== null) {
         let body = JSON.stringify({
           username: username,
@@ -34,15 +34,14 @@ function GameOver(props: any): JSX.Element {
     }
   }
 
-  const calculateWPM = () => {
+  const calculateWPM = (): string => {
     const time = props.timeString;
     if (time !== undefined) {
       const [minutes, seconds]: any = time?.split(':');
       const testDurationInMinutes: number = timeDurationToFloatNumber(parseInt(minutes), parseInt(seconds));
       const wpm = (props.correctLetters.length / 5) * (1 / testDurationInMinutes);
-      addToLeaderboard(wpm.toFixed(2));
       return wpm.toFixed(2);
-    }
+    } else return "";
   };
 
   const getPercent = (value: number, total: number) => {
@@ -58,12 +57,11 @@ function GameOver(props: any): JSX.Element {
     return getPercent(props.incorrectLetters.length, props.totalTyped);
   };
 
-  // React.useEffect(() => {
-  //   return () => {
-  //     const wpm = calculateWPM();
-  //     addToLeaderboard(wpm);
-  //   }
-  // }, []);
+  React.useEffect(() => {
+    const WPM: string = calculateWPM();
+    addToLeaderboard(WPM);
+    setWPM(WPM);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -72,7 +70,7 @@ function GameOver(props: any): JSX.Element {
           <p className={styles.header}> lesson </p>
           <p className={styles.value}> {props.title}</p>
           <p className={styles.header}> wpm </p>
-          <p className={styles.value}> {calculateWPM()}</p>
+          <p className={styles.value}> {_wpm}</p>
           <p className={styles.header}> accuracy </p>
           <p className={styles.value}> {calculateAccuracy()}% </p>
         </Grid>
